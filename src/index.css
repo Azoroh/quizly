@@ -307,6 +307,16 @@ button {
     background: rgba(255, 255, 255, 0.12);
 }
 
+.btn-secondary:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+}
+
 .btn:disabled {
     opacity: 0.45;
     cursor: not-allowed;

@@ -72,6 +72,15 @@ function reducer(state, action) {
         answer: null,
       };
 
+    case "finish":
+      return {
+        ...state,
+        status: "finished",
+        answer: null,
+        highscore:
+          state.points > state.highscore ? state.points : state.highscore,
+      };
+
     default:
       throw new Error("Unknown action");
   }
@@ -79,11 +88,22 @@ function reducer(state, action) {
 
 export default function App() {
   const [
-    { questions, numQuestions, index, status, errorMessage, answer, points },
+    {
+      questions,
+      numQuestions,
+      index,
+      status,
+      errorMessage,
+      answer,
+      points,
+      highscore,
+    },
     dispatch,
   ] = useReducer(reducer, initialState, init);
 
-  console.log(points);
+  // console.log(points);
+  const questionsLength = questions.length;
+  console.log(questionsLength);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -142,10 +162,14 @@ export default function App() {
             question={questions[index]}
             dispatch={dispatch}
             answer={answer}
+            index={index}
+            questionsLength={questionsLength}
           />
         )}
 
-        {status === "finished" && <EndScreen />}
+        {status === "finished" && (
+          <EndScreen points={points} highscore={highscore} />
+        )}
       </Main>
     </>
   );
