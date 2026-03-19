@@ -6,6 +6,8 @@ import Question from "./Question";
 import Error from "./Error";
 import Loader from "./Loader";
 
+const POINTS_PER_QUESTION = 10;
+
 const initialState = {
   allQuestions: [],
   questions: [],
@@ -60,7 +62,7 @@ function reducer(state, action) {
         answer: action.payload,
         points:
           curQuestion.correct_answer === action.payload
-            ? state.points + 10
+            ? state.points + POINTS_PER_QUESTION
             : state.points,
       };
     }
@@ -79,6 +81,11 @@ function reducer(state, action) {
         answer: null,
         highscore:
           state.points > state.highscore ? state.points : state.highscore,
+      };
+
+    case "restart":
+      return {
+        ...initialState,
       };
 
     default:
@@ -101,9 +108,11 @@ export default function App() {
     dispatch,
   ] = useReducer(reducer, initialState, init);
 
-  // console.log(points);
   const questionsLength = questions.length;
+  const possibleMaxScore = questionsLength * POINTS_PER_QUESTION;
+  console.log(possibleMaxScore);
   console.log(questionsLength);
+  console.log(points);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -168,7 +177,12 @@ export default function App() {
         )}
 
         {status === "finished" && (
-          <EndScreen points={points} highscore={highscore} />
+          <EndScreen
+            points={points}
+            highscore={highscore}
+            dispatch={dispatch}
+            possibleMaxScore={possibleMaxScore}
+          />
         )}
       </Main>
     </>
