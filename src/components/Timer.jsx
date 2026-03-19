@@ -16,7 +16,11 @@ export default function Timer({ secondsRemaining, dispatch }) {
   return (
     <div className="timer-pill">
       <span className="timer-label">Time Left</span>
-      <span className="timer-value">{secondsRemaining}</span>
+      <span className="timer-value">
+        {minutes < 10 && "0"}
+        {minutes}:{seconds < 10 && "0"}
+        {seconds}
+      </span>
     </div>
   );
 }

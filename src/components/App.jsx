@@ -8,7 +8,7 @@ import Loader from "./Loader";
 import Timer from "./Timer";
 
 const POINTS_PER_QUESTION = 10;
-const SECS_PER_QUESTION = 5;
+const SECS_PER_QUESTION = 10;
 
 const initialState = {
   allQuestions: [],
