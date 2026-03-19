@@ -1,6 +1,7 @@
+import { decodeHTML } from "../utils/decodeHTML";
 import Options from "./Options";
 
-export default function Question({ dispatch, question }) {
+export default function Question({ dispatch, question, answer }) {
   console.log(question);
 
   return (
@@ -22,7 +23,7 @@ export default function Question({ dispatch, question }) {
             <h2 className="question-text">{decodeHTML(question.question)}</h2>
           </div>
 
-          <Options question={question} />
+          <Options question={question} dispatch={dispatch} answer={answer} />
 
           <div className="quiz-footer">
             <button className="btn btn-secondary">Next</button>
@@ -36,11 +37,4 @@ export default function Question({ dispatch, question }) {
       </div>
     </section>
   );
-}
-
-// helper function to decode the text before rendering
-function decodeHTML(html) {
-  const txt = document.createElement("textarea");
-  txt.innerHTML = html;
-  return txt.value;
 }

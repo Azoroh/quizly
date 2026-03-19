@@ -52,10 +52,17 @@ function reducer(state, action) {
         status: "active",
       };
 
+    case "newAnswer":
+      return {
+        ...state,
+        answer: action.payload,
+      };
+
     case "nextQuestion":
       return {
         ...state,
         index: state.index + 1,
+        answer: null,
       };
 
     default:
@@ -64,8 +71,10 @@ function reducer(state, action) {
 }
 
 export default function App() {
-  const [{ questions, numQuestions, index, status, errorMessage }, dispatch] =
-    useReducer(reducer, initialState, init);
+  const [
+    { questions, numQuestions, index, status, errorMessage, answer },
+    dispatch,
+  ] = useReducer(reducer, initialState, init);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -120,7 +129,11 @@ export default function App() {
         )}
 
         {status === "active" && (
-          <Question question={questions[index]} dispatch={dispatch} />
+          <Question
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+          />
         )}
 
         {status === "finished" && <EndScreen />}

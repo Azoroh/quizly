@@ -1,12 +1,36 @@
-export default function Options({ question }) {
-  //   const options = [question.correct_answer, ...question.incorrect_answers].sort(
-  //     () => Math.random() - 0.5,
-  //   );
-  //   console.log(options);
+import { decodeHTML } from "../utils/decodeHTML";
+
+export default function Options({ dispatch, question, answer }) {
+  //   console.log(question.options);
+  console.log(answer);
+  const hasAnswered = answer !== null;
+  console.log(hasAnswered);
 
   return (
     <div className="options-grid">
-      <button className="option-card">
+      {question.options.map((option, i) => (
+        <button
+          disabled={hasAnswered}
+          key={i}
+          className={`option-card 
+            ${option === answer ? "option-selected" : ""}
+            ${
+              hasAnswered
+                ? option === question.correct_answer
+                  ? "option-correct"
+                  : "option-incorrect"
+                : ""
+            }
+            `}
+          onClick={() => dispatch({ type: "newAnswer", payload: option })}
+        >
+          <span className="option-letter">{getOptionLetter(i)}</span>
+          <span className="option-text">{decodeHTML(option)}</span>
+          {option === answer && <span className="option-state-icon">✓</span>}
+        </button>
+      ))}
+
+      {/* <button className="option-card">
         <span className="option-letter">A</span>
         <span className="option-text">map()</span>
       </button>
@@ -25,7 +49,12 @@ export default function Options({ question }) {
       <button className="option-card">
         <span className="option-letter">D</span>
         <span className="option-text">find()</span>
-      </button>
+      </button> */}
     </div>
   );
+}
+
+// helper to return Alphabets according to index
+function getOptionLetter(index) {
+  return String.fromCharCode(65 + index);
 }
