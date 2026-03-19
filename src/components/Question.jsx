@@ -2,7 +2,6 @@ import { decodeHTML } from "../utils/helpers";
 import NextButton from "./NextButton";
 import Options from "./Options";
 import Progress from "./Progress";
-import Timer from "./Timer";
 
 export default function Question({
   dispatch,
@@ -10,11 +9,8 @@ export default function Question({
   answer,
   questionsLength,
   index,
-  secondsRemaining,
   children,
 }) {
-  console.log(question);
-
   return (
     <section className="screen screen-quiz">
       <div className="content-wrap">

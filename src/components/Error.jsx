@@ -1,5 +1,4 @@
 export default function Error({ message, dispatch }) {
-  //   console.log(message);
   return (
     <section className="screen screen-error">
       <div className="glass-card error-card">

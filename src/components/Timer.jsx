@@ -4,7 +4,6 @@ export default function Timer({ secondsRemaining, dispatch }) {
   const minutes = Math.floor(secondsRemaining / 60);
   const seconds = secondsRemaining % 60;
 
-  console.log(secondsRemaining);
   useEffect(() => {
     const intervalId = setInterval(() => {
       dispatch({ type: "timer" });

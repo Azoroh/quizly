@@ -140,9 +140,6 @@ export default function App() {
 
   const questionsLength = questions.length;
   const possibleMaxScore = questionsLength * POINTS_PER_QUESTION;
-  console.log(possibleMaxScore);
-  console.log(questionsLength);
-  console.log(points);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -187,6 +184,7 @@ export default function App() {
     localStorage.setItem("highscore", JSON.stringify(highscore));
   }, [highscore]);
 
+  // Enter key shortcut
   useKey(
     "enter",
     index < numQuestions - 1
