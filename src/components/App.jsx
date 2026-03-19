@@ -5,9 +5,10 @@ import EndScreen from "./EndScreen";
 import Question from "./Question";
 import Error from "./Error";
 import Loader from "./Loader";
+import Timer from "./Timer";
 
 const POINTS_PER_QUESTION = 10;
-const SECS_PER_QUESTION = 10;
+const SECS_PER_QUESTION = 5;
 
 const initialState = {
   allQuestions: [],
@@ -58,6 +59,7 @@ function reducer(state, action) {
       return {
         ...state,
         status: "active",
+        secondsRemaining: state.questions.length * SECS_PER_QUESTION,
       };
 
     case "newAnswer": {
@@ -107,6 +109,13 @@ function reducer(state, action) {
         status: "ready",
       };
 
+    case "timer":
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "finished" : state.status,
+      };
+
     default:
       throw new Error("Unknown action");
   }
@@ -123,6 +132,7 @@ export default function App() {
       answer,
       points,
       highscore,
+      secondsRemaining,
     },
     dispatch,
   ] = useReducer(reducer, initialState, init);
@@ -202,7 +212,10 @@ export default function App() {
             answer={answer}
             index={index}
             questionsLength={questionsLength}
-          />
+            secondsRemaining={secondsRemaining}
+          >
+            <Timer secondsRemaining={secondsRemaining} dispatch={dispatch} />
+          </Question>
         )}
 
         {status === "finished" && (

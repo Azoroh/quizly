@@ -1,18 +1,22 @@
 import { useEffect } from "react";
 
-export default function Timer() {
+export default function Timer({ secondsRemaining, dispatch }) {
+  const minutes = Math.floor(secondsRemaining / 60);
+  const seconds = secondsRemaining % 60;
+
+  console.log(secondsRemaining);
   useEffect(() => {
     const intervalId = setInterval(() => {
-      console.log("hey");
+      dispatch({ type: "timer" });
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="timer-pill">
       <span className="timer-label">Time Left</span>
-      <span className="timer-value">00:14</span>
+      <span className="timer-value">{secondsRemaining}</span>
     </div>
   );
 }

@@ -10,6 +10,8 @@ export default function Question({
   answer,
   questionsLength,
   index,
+  secondsRemaining,
+  children,
 }) {
   console.log(question);
 
@@ -34,7 +36,7 @@ export default function Question({
               index={index}
             />
 
-            <Timer />
+            {children}
           </div>
         </div>
       </div>
