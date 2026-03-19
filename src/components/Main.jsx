@@ -1,3 +1,3 @@
-export default function Main() {
-  return <div>Main</div>;
+export default function Main({ children }) {
+  return <main className="app-shell">{children}</main>;
 }
