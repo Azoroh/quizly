@@ -6,6 +6,7 @@ import Question from "./Question";
 import Error from "./Error";
 import Loader from "./Loader";
 import Timer from "./Timer";
+import { useKey } from "./hooks/useKey";
 
 const POINTS_PER_QUESTION = 10;
 const SECS_PER_QUESTION = 10;
@@ -185,6 +186,18 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("highscore", JSON.stringify(highscore));
   }, [highscore]);
+
+  useKey(
+    "enter",
+    index < numQuestions - 1
+      ? () => {
+          dispatch({ type: "nextQuestion" });
+        }
+      : () => {
+          dispatch({ type: "finish" });
+        },
+    answer,
+  );
 
   return (
     <>
