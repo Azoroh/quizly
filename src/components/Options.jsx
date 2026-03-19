@@ -1,4 +1,4 @@
-import { decodeHTML } from "../utils/decodeHTML";
+import { decodeHTML, getOptionLetter } from "../utils/helpers";
 
 export default function Options({ dispatch, question, answer }) {
   //   console.log(question.options);
@@ -52,9 +52,4 @@ export default function Options({ dispatch, question, answer }) {
       </button> */}
     </div>
   );
-}
-
-// helper to return Alphabets according to index
-function getOptionLetter(index) {
-  return String.fromCharCode(65 + index);
 }

@@ -1,4 +1,5 @@
-import { decodeHTML } from "../utils/decodeHTML";
+import { decodeHTML } from "../utils/helpers";
+import NextButton from "./NextButton";
 import Options from "./Options";
 
 export default function Question({ dispatch, question, answer }) {
@@ -26,7 +27,7 @@ export default function Question({ dispatch, question, answer }) {
           <Options question={question} dispatch={dispatch} answer={answer} />
 
           <div className="quiz-footer">
-            <button className="btn btn-secondary">Next</button>
+            <NextButton dispatch={dispatch} />
 
             <div className="timer-pill">
               <span className="timer-label">Time Left</span>

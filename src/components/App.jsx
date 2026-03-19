@@ -52,11 +52,18 @@ function reducer(state, action) {
         status: "active",
       };
 
-    case "newAnswer":
+    case "newAnswer": {
+      const curQuestion = state.questions[state.index];
+
       return {
         ...state,
         answer: action.payload,
+        points:
+          curQuestion.correct_answer === action.payload
+            ? state.points + 10
+            : state.points,
       };
+    }
 
     case "nextQuestion":
       return {
@@ -72,9 +79,11 @@ function reducer(state, action) {
 
 export default function App() {
   const [
-    { questions, numQuestions, index, status, errorMessage, answer },
+    { questions, numQuestions, index, status, errorMessage, answer, points },
     dispatch,
   ] = useReducer(reducer, initialState, init);
+
+  console.log(points);
 
   useEffect(() => {
     const controller = new AbortController();
