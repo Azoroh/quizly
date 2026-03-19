@@ -1,4 +1,4 @@
-export default function Error({ message }) {
+export default function Error({ message, dispatch }) {
   //   console.log(message);
   return (
     <section className="screen screen-error">
@@ -13,7 +13,12 @@ export default function Error({ message }) {
         <p className="screen-subtitle error-text">{message}</p>
 
         <div className="error-actions">
-          <button className="btn btn-primary btn-large">Try Again</button>
+          <button
+            className="btn btn-primary btn-large"
+            onClick={() => dispatch({ type: "tryAgain" })}
+          >
+            Try Again
+          </button>
         </div>
       </div>
     </section>

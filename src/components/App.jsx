@@ -7,6 +7,7 @@ import Error from "./Error";
 import Loader from "./Loader";
 
 const POINTS_PER_QUESTION = 10;
+const SECS_PER_QUESTION = 10;
 
 const initialState = {
   allQuestions: [],
@@ -18,10 +19,15 @@ const initialState = {
   points: 0,
   highscore: 0,
   answer: null,
+  secondsRemaining: null,
 };
 
 function init(initial) {
-  return initial;
+  const savedHighScore = JSON.parse(localStorage.getItem("highscore")) || 0;
+  return {
+    ...initial,
+    highscore: savedHighScore,
+  };
 }
 
 function reducer(state, action) {
@@ -85,7 +91,20 @@ function reducer(state, action) {
 
     case "restart":
       return {
+        ...state,
+        answer: null,
+        index: 0,
+        points: 0,
+        status: "ready",
+      };
+
+    case "tryAgain":
+      return {
         ...initialState,
+        answer: null,
+        index: 0,
+        points: 0,
+        status: "ready",
       };
 
     default:
@@ -153,6 +172,10 @@ export default function App() {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("highscore", JSON.stringify(highscore));
+  }, [highscore]);
+
   return (
     <>
       <div className="bg-orb orb-1"></div>
@@ -161,9 +184,15 @@ export default function App() {
 
       <Main>
         {status === "loading" && <Loader />}
-        {status === "error" && <Error message={errorMessage} />}
+        {status === "error" && (
+          <Error message={errorMessage} dispatch={dispatch} />
+        )}
         {status === "ready" && (
-          <StartScreen dispatch={dispatch} numQuestions={numQuestions} />
+          <StartScreen
+            dispatch={dispatch}
+            numQuestions={numQuestions}
+            highscore={highscore}
+          />
         )}
 
         {status === "active" && (

@@ -1,4 +1,4 @@
-export default function StartScreen({ dispatch, numQuestions }) {
+export default function StartScreen({ dispatch, numQuestions, highscore }) {
   function handleStartQuiz() {
     if (!numQuestions) return;
     dispatch({ type: "start" });
@@ -16,7 +16,7 @@ export default function StartScreen({ dispatch, numQuestions }) {
 
         <div className="score-panel">
           <span className="score-label">Highest Score</span>
-          <strong className="score-value">18 / 20</strong>
+          <strong className="score-value">{highscore}</strong>
         </div>
 
         <div className="quiz-settings">
