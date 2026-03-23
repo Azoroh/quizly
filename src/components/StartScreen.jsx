@@ -1,14 +1,10 @@
-import { mockQuiz } from "../data/mockQuiz.js";
-
 import StartHeader from "./start/StartHeader";
 import StartHero from "./start/StartHero";
 import SummaryStats from "./start/SummaryStats";
 import QuestionSelector from "./start/QuestionSelector";
 import StartButton from "./start/StartButton";
 
-export default function StartScreen() {
-  console.log(mockQuiz);
-
+export default function StartScreen({ dispatch, questionCount }) {
   return (
     <div className="dark bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col items-center justify-center overflow-x-hidden relative">
       {/* Atmospheric Background */}
@@ -33,11 +29,11 @@ export default function StartScreen() {
             </span>
           </div>
 
-          <SummaryStats />
+          <SummaryStats questionCount={questionCount} />
 
-          <QuestionSelector />
+          <QuestionSelector dispatch={dispatch} questionCount={questionCount} />
 
-          <StartButton />
+          <StartButton onClick={() => dispatch({ type: "startQuiz" })} />
         </div>
       </main>
 

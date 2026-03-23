@@ -1,7 +1,9 @@
-import { useState } from "react";
+export default function QuestionSelector({ dispatch, questionCount }) {
+  function handleSelectCount(count) {
+    if (count === questionCount) return;
 
-export default function QuestionSelector() {
-  const [selected, setSelected] = useState(15);
+    dispatch({ type: "selectQuestionCount", payload: count });
+  }
 
   return (
     <div className="flex flex-col items-center gap-3">
@@ -12,9 +14,9 @@ export default function QuestionSelector() {
         {[5, 10, 15].map((count) => (
           <button
             key={count}
-            onClick={() => setSelected(count)}
+            onClick={() => handleSelectCount(count)}
             className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
-              selected === count
+              questionCount === count
                 ? "bg-primary text-on-primary segmented-control-active"
                 : "text-on-surface-variant hover:text-on-surface"
             }`}

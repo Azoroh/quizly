@@ -1,28 +1,29 @@
 const stats = [
   {
     icon: "quiz",
-    label: "Questions",
+    label: "questions",
     value: "15 Total",
+    // value: "15 Total",
     color: "text-primary-dim",
     hover: "hover:border-primary/20",
   },
   {
     icon: "bar_chart",
-    label: "Difficulty",
+    label: "difficulty",
     value: "Medium",
     color: "text-tertiary-dim",
     hover: "hover:border-tertiary/20",
   },
   {
     icon: "schedule",
-    label: "Time",
+    label: "time",
     value: "8 min",
     color: "text-secondary-dim",
     hover: "hover:border-secondary/20",
   },
 ];
 
-export default function SummaryStats() {
+export default function SummaryStats({ questionCount }) {
   return (
     <div className="grid grid-cols-3 gap-3 md:gap-4">
       {stats.map(({ icon, label, value, color, hover }) => (
@@ -36,7 +37,9 @@ export default function SummaryStats() {
           <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/70">
             {label}
           </span>
-          <span className="text-base font-bold text-on-surface">{value}</span>
+          <span className="text-base font-bold text-on-surface">
+            {label === "questions" ? `${questionCount} Total` : value}
+          </span>
         </div>
       ))}
     </div>
