@@ -1,16 +1,20 @@
-export default function SummaryStats({ correct, accuracy, time }) {
+export default function SummaryStats({
+  correctAnswers,
+  accuracyPercent,
+  time,
+}) {
   const stats = [
     {
       icon: "check_circle",
       color: "text-primary",
       label: "Correct",
-      value: `${correct} Answers`,
+      value: `${correctAnswers} Answers`,
     },
     {
       icon: "speed",
       color: "text-secondary",
       label: "Accuracy",
-      value: `${accuracy}%`,
+      value: `${accuracyPercent}%`,
     },
     { icon: "timer", color: "text-tertiary", label: "Time", value: time },
   ];

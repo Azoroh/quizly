@@ -4,7 +4,13 @@ import SummaryStats from "./result/SummaryStats";
 import AIInsightPanel from "./result/AiSummaryPanel";
 import ResultActions from "./result/ResultActions";
 
-export default function ResultScreen() {
+export default function ResultScreen({
+  points,
+  maxPossiblePoints,
+  highScore,
+  correctAnswers,
+  accuracyPercent,
+}) {
   return (
     <div className="dark bg-surface font-body text-on-surface selection:bg-primary/30 min-h-screen flex flex-col">
       {/* Background Decorations */}
@@ -17,8 +23,16 @@ export default function ResultScreen() {
       <main className="flex-grow flex items-center justify-center px-6 py-24">
         <div className="w-full max-w-3xl">
           <div className="glass-card rounded-2xl p-8 md:p-12 flex flex-col items-center shadow-[0_40px_100px_rgba(0,0,0,0.6)]">
-            <ScoreDisplay score={12} total={15} highScore={13} />
-            <SummaryStats correct={12} accuracy={80} time="6m 42s" />
+            <ScoreDisplay
+              points={points}
+              maxPossiblePoints={maxPossiblePoints}
+              highScore={highScore}
+            />
+            <SummaryStats
+              correctAnswers={correctAnswers}
+              accuracyPercent={accuracyPercent}
+              time="6m 42s"
+            />
             <AIInsightPanel />
             <ResultActions />
           </div>

@@ -51,7 +51,7 @@ export default function QuestionScreen({
               onClick={
                 index !== questions.length - 1
                   ? () => dispatch({ type: "nextQuestion" })
-                  : () => dispatch({ type: "finalQuestion" })
+                  : () => dispatch({ type: "finish" })
               }
               buttonText={
                 index !== questions.length - 1
