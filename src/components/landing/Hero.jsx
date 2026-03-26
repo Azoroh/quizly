@@ -1,4 +1,6 @@
 export default function Hero({ dispatch, inputText }) {
+  const isDisabled = inputText.trim().length < 50;
+
   return (
     <div className="max-w-4xl mx-auto text-center">
       <h1 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-8 leading-[1.1] text-white">
@@ -32,7 +34,12 @@ export default function Hero({ dispatch, inputText }) {
               </span>
             </button>
             <button
-              className="w-full md:w-auto px-8 py-3.5 rounded-full bg-gradient-to-r from-primary to-primary-dim text-on-primary-fixed font-black text-base shadow-[0_0_30px_rgba(159,167,255,0.3)] hover:shadow-[0_0_40px_rgba(159,167,255,0.4)] transition-all duration-300 active:scale-95"
+              disabled={isDisabled}
+              className={`w-full md:w-auto px-8 py-3.5 rounded-full font-black text-base transition-all duration-300 ${
+                isDisabled
+                  ? "bg-surface-container-highest text-on-surface-variant/40 cursor-not-allowed"
+                  : "bg-gradient-to-r from-primary to-primary-dim text-on-primary-fixed shadow-[0_0_30px_rgba(159,167,255,0.3)] hover:shadow-[0_0_40px_rgba(159,167,255,0.4)] active:scale-95"
+              }`}
               onClick={() => dispatch({ type: "generateQuiz" })}
             >
               Generate Quiz
