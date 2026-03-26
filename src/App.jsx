@@ -104,6 +104,12 @@ function reducer(state, action) {
         status: "ready",
       };
 
+    case "newQuiz":
+      return {
+        ...state,
+        status: "loading",
+      };
+
     case "tickTock":
       return {
         ...state,
