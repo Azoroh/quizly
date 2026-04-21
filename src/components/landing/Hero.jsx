@@ -5,7 +5,7 @@ export default function Hero({ dispatch, inputText }) {
     <div className="max-w-4xl mx-auto text-center">
       <h1 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-8 leading-[1.1] text-white">
         Turn your study material into a{" "}
-        <span className="text-primary">personalized quiz</span>
+        <span className="animated-hero-gradient">personalized quiz</span>
       </h1>
       <p className="text-on-surface-variant text-lg md:text-xl max-w-2xl mx-auto mb-16 font-medium leading-relaxed">
         Paste your notes or upload a file and let Quizly generate a
@@ -15,12 +15,10 @@ export default function Hero({ dispatch, inputText }) {
       {/* Input Panel */}
       <div className="relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-[2rem] blur-2xl opacity-50 group-hover:opacity-70 transition duration-1000"></div>
-        {/* <div className="relative glass-panel rounded-[2rem] p-4 md:p-6 border border-white/10 glow-border"> */}
+
         <div className="relative glass-panel rounded-t-[2.25rem] rounded-b-[2rem] p-4 md:p-6 border border-white/10 glow-border">
           <textarea
             className="w-full min-h-[240px] px-4 py-3 bg-transparent border-none outline-none focus:outline focus:outline-1 focus:outline-primary/40 rounded-t-2xl text-on-surface text-lg placeholder:text-on-surface-variant/50 resize-none font-small"
-            // className="w-full min-h-[240px] bg-transparent border-none focus:ring-50 text-on-surface text-lg placeholder:text-on-surface-variant/50 resize-none font-small"
-
             placeholder="Paste your notes or study material to generate a quiz instantly..."
             onChange={(e) =>
               dispatch({ type: "textInput", payload: e.target.value })
