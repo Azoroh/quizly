@@ -36,7 +36,7 @@ export default function ResultScreen({
             <SummaryStats
               correctAnswers={correctAnswers}
               accuracyPercent={accuracyPercent}
-              time={`${formatTime(quizSeconds)} min`}
+              time={`${formatTime(quizSeconds)} ${quizSeconds < 60 ? "sec" : "min"}`}
             />
             <AIInsightPanel />
             <ResultActions

@@ -53,14 +53,13 @@ export default function OptionsList({
 
   return (
     <div className="grid grid-cols-1 gap-4 mb-12">
-      {options.map((option, i) => {
+      {options?.map((option, i) => {
         const styles = getStyles(i);
         return (
           <button
             key={i}
             onClick={() => {
-              (!hasSelected && dispatch({ type: "selectAnswer", payload: i }),
-                console.log(i === correctOption));
+              !hasSelected && dispatch({ type: "selectAnswer", payload: i });
             }}
             disabled={hasSelected}
             className={`group flex items-center text-left p-6 rounded-2xl transition-all duration-300 border ${styles.button}`}

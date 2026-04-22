@@ -10,7 +10,7 @@ export default function LoadingScreen({ dispatch, inputText }) {
       try {
         const quiz = await generateQuiz(inputText);
 
-        console.log(quiz);
+        // console.log(quiz);
         dispatch({ type: "ready", payload: quiz });
       } catch (err) {
         console.error("Quiz generation failed:", err);

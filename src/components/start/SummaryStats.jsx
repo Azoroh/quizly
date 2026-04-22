@@ -41,7 +41,8 @@ export default function SummaryStats({ questionCount, remainingSeconds }) {
           <span className="text-base font-bold text-on-surface">
             {label !== "questions" && label !== "time" && value}
             {label === "questions" && `${questionCount} Total`}
-            {label === "time" && `${formatTime(remainingSeconds, true)} min`}
+            {label === "time" &&
+              `${formatTime(remainingSeconds, true)} ${remainingSeconds < 60 ? "sec" : "min"}`}
           </span>
         </div>
       ))}

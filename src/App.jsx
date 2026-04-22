@@ -12,12 +12,13 @@ import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
 
 const POINTS_PER_QUESTION = 10;
-const SECS_PER_QUESTION = 10;
+const SECS_PER_QUESTION = 15;
 
 // status = "landing" | "loading" | "ready" | "active" | "finished" | "error"
 const initialState = {
   // totalQuestions: mockQuiz.questions,
   totalQuestions: [],
+  questions: [],
   questionCount: 5,
   status: "landing",
   index: null,
@@ -27,7 +28,25 @@ const initialState = {
   quizSeconds: 0,
   inputText: "",
   error: null,
+
+  reviewPayload: [],
+  aiSummaryStatus: null,
 };
+
+function init(initial) {
+  const savedHscore = JSON.parse(localStorage.getItem("highscore"));
+  const savedQuestions = getRandomItems(
+    initial.totalQuestions,
+    initial.questionCount,
+  );
+
+  return {
+    ...initial,
+    questions: savedQuestions,
+    highScore: savedHscore || 0,
+    remainingSeconds: savedQuestions.length * SECS_PER_QUESTION,
+  };
+}
 
 function reducer(state, action) {
   switch (action.type) {
@@ -43,13 +62,21 @@ function reducer(state, action) {
         status: "loading",
       };
 
-    case "ready":
+    case "ready": {
+      const selectedQuestions = getRandomItems(
+        action.payload,
+        state.questionCount,
+      );
+
       return {
         ...state,
         status: "ready",
         totalQuestions: action.payload,
-        total: getRandomItems(action.payload, state.questionCount),
+        questions: selectedQuestions,
+        quizSeconds: 0,
+        remainingSeconds: selectedQuestions.length * SECS_PER_QUESTION,
       };
+    }
 
     case "selectQuestionCount": {
       const selectedQuestions = getRandomItems(
@@ -72,15 +99,35 @@ function reducer(state, action) {
         index: 0,
       };
 
-    case "selectAnswer":
+    case "selectAnswer": {
+      const curQuestion = state.questions[state.index];
+
+      const reviewItem = {
+        ...curQuestion,
+        selectedOption: action.payload,
+        isCorrect: curQuestion.correctOption === action.payload,
+        index: state.index,
+      };
+
+      const alreadyExists = state.reviewPayload.some(
+        (item) => item.index === state.index,
+      );
+
       return {
         ...state,
         answer: action.payload,
         points:
-          state.questions[state.index].correctOption === action.payload
+          curQuestion.correctOption === action.payload
             ? state.points + POINTS_PER_QUESTION
             : state.points,
+
+        reviewPayload: alreadyExists
+          ? state.reviewPayload.map((item) =>
+              item.index === state.index ? reviewItem : item,
+            )
+          : [...state.reviewPayload, reviewItem],
       };
+    }
 
     case "nextQuestion":
       return {
@@ -95,6 +142,7 @@ function reducer(state, action) {
         status: "finished",
         highScore:
           state.points > state.highScore ? state.points : state.highScore,
+        // quizSeconds: state.quizSeconds - 1,
       };
 
     case "restart":
@@ -105,6 +153,8 @@ function reducer(state, action) {
         points: 0,
         remainingSeconds: state.questions.length * SECS_PER_QUESTION,
         status: "ready",
+        quizSeconds: 0,
+        reviewPayload: [],
       };
 
     case "newQuiz":
@@ -112,15 +162,20 @@ function reducer(state, action) {
         ...state,
         status: "landing",
         inputText: state.inputText,
+        reviewPayload: [],
       };
 
-    case "tickTock":
+    case "tickTock": {
+      const nextRemainingSeconds =
+        state.remainingSeconds > 0 ? state.remainingSeconds - 1 : 0;
+
       return {
         ...state,
-        remainingSeconds: state.remainingSeconds - 1,
-        status: state.remainingSeconds === 0 ? "finished" : state.status,
+        remainingSeconds: nextRemainingSeconds,
+        status: nextRemainingSeconds === 0 ? "finished" : state.status,
         quizSeconds: state.quizSeconds + 1,
       };
+    }
 
     case "error":
       return {
@@ -132,21 +187,6 @@ function reducer(state, action) {
     default:
       throw new Error("Unknown Action");
   }
-}
-
-function init(initial) {
-  const savedHscore = JSON.parse(localStorage.getItem("highscore"));
-  const savedQuestions = getRandomItems(
-    initial.totalQuestions,
-    initial.questionCount,
-  );
-
-  return {
-    ...initial,
-    questions: savedQuestions,
-    highScore: savedHscore || 0,
-    remainingSeconds: savedQuestions.length * SECS_PER_QUESTION,
-  };
 }
 
 export default function App() {
@@ -163,6 +203,7 @@ export default function App() {
       quizSeconds,
       inputText,
       error,
+      reviewPayload,
     },
     dispatch,
   ] = useReducer(reducer, initialState, init);
@@ -173,7 +214,7 @@ export default function App() {
   const correctAnswers = points / POINTS_PER_QUESTION;
   const accuracyPercent = (points / maxPossiblePoints) * 100;
 
-  console.log(questions);
+  console.log(reviewPayload);
 
   return (
     <div>
