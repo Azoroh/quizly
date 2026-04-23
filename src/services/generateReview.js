@@ -6,7 +6,7 @@ export default async function generateReview(reviewPayload) {
     }, 12000)
 
     try {
-        const res = await fetch("http://localhost:3001/api/generate-review", {
+        const res = await fetch("/api/generate-review", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ reviewPayload }),

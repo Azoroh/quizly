@@ -1,5 +1,5 @@
 export async function generateQuiz(inputText, questionCount = 15) {
-    const res = await fetch("http://localhost:3001/api/generate-quiz", {
+    const res = await fetch("/api/generate-quiz", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inputText, questionCount })
