@@ -19,17 +19,21 @@ const initialState = {
   questionCount: 5,
 
   // "landing" | "loading" | "ready" | "active" | "finished" | "error"
-  status: "loading",
+  status: "landing",
   index: null,
   answer: null,
   points: 0,
   remainingSeconds: 0,
   quizSeconds: 0,
   inputText: "",
+  quizSourceText: "",
+
   error: null,
 
-  reviewPayload: [],
+  //loading stage states
+  loadingStage: "",
 
+  reviewPayload: [],
   // "idle" | "loading" | "ready" | "error"
   aiSummaryStatus: "idle",
   aiSummary: "",
@@ -60,6 +64,12 @@ function reducer(state, action) {
       return {
         ...state,
         inputText: action.payload,
+      };
+
+    case "prepareQuizText":
+      return {
+        ...state,
+        quizSourceText: action.payload,
       };
 
     case "generateQuiz":
@@ -236,6 +246,18 @@ function reducer(state, action) {
         ),
       };
 
+    //loading screen
+    case "extractingStage":
+      return { ...state, loadingStage: "extracting" };
+
+    case "analyzingStage":
+      return { ...state, loadingStage: "analyzing" };
+
+    case "finalizingStage":
+      return { ...state, loadingStage: "finalizing" };
+    case "readyStage":
+      return { ...state, loadingStage: "ready" };
+
     default:
       throw new Error("Unknown Action");
   }
@@ -260,6 +282,8 @@ export default function App() {
       aiSummary,
       focusAreas,
       uploadedFiles,
+      quizSourceText,
+      loadingStage,
     },
     dispatch,
   ] = useReducer(reducer, initialState, init);
@@ -270,8 +294,7 @@ export default function App() {
   const correctAnswers = points / POINTS_PER_QUESTION;
   const accuracyPercent = (points / maxPossiblePoints) * 100;
 
-  // console.log(reviewPayload);
-  // console.log(aiSummaryStatus);
+  console.log(loadingStage);
 
   return (
     <div>
@@ -283,7 +306,11 @@ export default function App() {
         />
       )}
       {status === "loading" && (
-        <LoadingScreen dispatch={dispatch} inputText={inputText} />
+        <LoadingScreen
+          dispatch={dispatch}
+          quizSourceText={quizSourceText}
+          uploadedFiles={uploadedFiles}
+        />
       )}
       {status === "error" && (
         <ErrorScreen

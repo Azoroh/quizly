@@ -2,26 +2,53 @@ import { useEffect } from "react";
 import LoadingHeader from "./loading/LoadingHeader";
 import LoadingCard from "./loading/LoadingCard";
 import { generateQuiz } from "../services/generateQuiz";
-import StartHeader from "./start/StartHeader";
+import { extractFileText } from "../services/extractFileText";
 
-export default function LoadingScreen({ dispatch, inputText }) {
-  // useEffect(() => {
-  //   async function fetchQuiz() {
-  //     try {
-  //       const quiz = await generateQuiz(inputText);
+export default function LoadingScreen({ dispatch, inputText, uploadedFiles }) {
+  useEffect(() => {
+    async function fetchQuiz() {
+      dispatch({ type: "extractingStage" });
 
-  //       dispatch({ type: "ready", payload: quiz });
-  //     } catch (err) {
-  //       console.error("Quiz generation failed:", err);
-  //       dispatch({
-  //         type: "error",
-  //         payload: err.message || "Failed to generate quiz",
-  //       });
-  //     }
-  //   }
+      try {
+        let combinedText;
 
-  //   fetchQuiz();
-  // }, [dispatch, inputText]);
+        try {
+          const extractedTexts = await Promise.all(
+            uploadedFiles.map(extractFileText),
+          );
+
+          combinedText = [inputText, ...extractedTexts]
+            .filter(Boolean)
+            .join("\n\n");
+        } catch (error) {
+          console.error("File extraction failed:", error);
+
+          dispatch({
+            type: "error",
+            payload:
+              error.message || "Failed to extract text from uploaded file",
+          });
+          return;
+        }
+
+        dispatch({ type: "analyzingStage" });
+
+        const quiz = await generateQuiz(combinedText);
+
+        dispatch({ type: "finalizingStage" });
+        dispatch({ type: "readyStage" });
+
+        dispatch({ type: "ready", payload: quiz });
+      } catch (err) {
+        console.error("Quiz generation failed:", err);
+        dispatch({
+          type: "error",
+          payload: err.message || "Failed to generate quiz",
+        });
+      }
+    }
+    fetchQuiz();
+  }, [dispatch, inputText, uploadedFiles]);
 
   return (
     <div className="dark bg-background text-on-surface font-body min-h-screen flex flex-col overflow-hidden relative">
@@ -30,13 +57,7 @@ export default function LoadingScreen({ dispatch, inputText }) {
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
 
-      {/* <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/5 blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/5 blur-[100px]"></div>
-      </div> */}
-
       <LoadingHeader />
-      {/* <StartHeader /> */}
 
       <main className="flex-grow flex items-center justify-center p-6 relative z-10">
         <LoadingCard />
