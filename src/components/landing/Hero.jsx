@@ -1,5 +1,7 @@
 import { useRef } from "react";
+
 import { extractPdfText } from "../../services/extractPdfText";
+import { extractDocxText } from "../../services/extractDocxText";
 
 export default function Hero({ dispatch, inputText, uploadedFiles }) {
   const fileInputRef = useRef(null);
