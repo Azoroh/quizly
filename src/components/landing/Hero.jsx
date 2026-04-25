@@ -3,6 +3,23 @@ import { useRef } from "react";
 import { extractPdfText } from "../../services/extractPdfText";
 import { extractDocxText } from "../../services/extractDocxText";
 
+async function extractFileText(fileItem) {
+  const file = fileItem.file;
+
+  if (file.type === "application/pdf") {
+    return extractPdfText(file);
+  }
+
+  if (
+    file.type ===
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ) {
+    return extractDocxText(file);
+  }
+
+  throw new Error(`Unsupported file type: ${file.type}`);
+}
+
 export default function Hero({ dispatch, inputText, uploadedFiles }) {
   const fileInputRef = useRef(null);
 
@@ -24,7 +41,7 @@ export default function Hero({ dispatch, inputText, uploadedFiles }) {
 
   async function handleGenerateQuiz() {
     const extractedTexts = await Promise.all(
-      uploadedFiles.map((item) => extractPdfText(item.file)),
+      uploadedFiles.map(extractFileText),
     );
 
     console.log(extractedTexts);
@@ -48,7 +65,7 @@ export default function Hero({ dispatch, inputText, uploadedFiles }) {
         onChange={handleFileChange}
         className="hidden"
         multiple
-        accept=".pdf" // Restrict file types
+        accept=".pdf, .docx" // Restrict file types
       />
 
       <h1 className="font-headline text-5xl md:text-7xl font-black tracking-tight mb-8 leading-[1.1] text-white">
