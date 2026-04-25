@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { extractPdfText } from "../../services/extractPdfText";
 
 export default function Hero({ dispatch, inputText, uploadedFiles }) {
   const fileInputRef = useRef(null);
@@ -17,6 +18,23 @@ export default function Hero({ dispatch, inputText, uploadedFiles }) {
     }));
 
     dispatch({ type: "addFiles", payload: newFiles });
+  }
+
+  async function handleGenerateQuiz() {
+    const extractedTexts = await Promise.all(
+      uploadedFiles.map((item) => extractPdfText(item.file)),
+    );
+
+    console.log(extractedTexts);
+
+    const combinedText = [inputText, ...extractedTexts]
+      .filter(Boolean)
+      .join("\n\n");
+
+    console.log(combinedText);
+
+    dispatch({ type: "textInput", payload: combinedText });
+    dispatch({ type: "generateQuiz" });
   }
 
   return (
@@ -117,7 +135,7 @@ export default function Hero({ dispatch, inputText, uploadedFiles }) {
                   ? "bg-surface-container-highest text-on-surface-variant/40 cursor-not-allowed"
                   : "bg-gradient-to-r from-primary to-primary-dim text-on-primary-fixed shadow-[0_0_30px_rgba(159,167,255,0.3)] hover:shadow-[0_0_40px_rgba(159,167,255,0.4)] active:scale-95"
               }`}
-              onClick={() => dispatch({ type: "generateQuiz" })}
+              onClick={handleGenerateQuiz}
             >
               Generate Quiz
             </button>

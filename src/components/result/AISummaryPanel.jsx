@@ -3,8 +3,6 @@ export default function AISummaryPanel({
   focusAreas,
   aiSummary,
 }) {
-  console.log(aiSummary);
-
   const isReadyorError =
     aiSummaryStatus === "ready" || aiSummaryStatus === "error";
 

@@ -20,7 +20,7 @@ export async function extractPdfText(file) {
     const pageTexts = []
 
     //loops through every page in the PDF (PDF.js page nums start at 1, not 0)
-    for (let i = 1; i < pdf.numPages; i++) { // 'i' is pageNumber
+    for (let i = 1; i <= pdf.numPages; i++) { // 'i' is pageNumber
         const page = await pdf.getPage(i) //gets one page
         const textContent = await page.getTextContent() //asks PDF.js for the text items on that page
 
