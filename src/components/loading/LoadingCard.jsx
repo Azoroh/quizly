@@ -36,7 +36,7 @@ export default function LoadingCard({
       <div className="relative w-full h-1.5 bg-surface-container-highest rounded-full mb-12 overflow-hidden">
         <div
           style={{ width: `${getLoadingStageVal(loadingStage)}%` }}
-          className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary-dim to-primary rounded-full progress-glow"
+          className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary-dim to-primary rounded-full progress-glow transition-[width] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
         ></div>
       </div>
 

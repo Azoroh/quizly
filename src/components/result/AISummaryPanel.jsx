@@ -127,19 +127,23 @@ function TypewriterSummary({ text, speed = 18, onDone }) {
 
     const intervalId = window.setInterval(() => {
       setTypedLength((current) => {
-        const next = current + 1;
-
-        if (next >= text.length) {
+        if (current >= text.length) {
           window.clearInterval(intervalId);
-          onDone?.();
+          return current;
         }
 
-        return next;
+        return current + 1;
       });
     }, speed);
 
     return () => window.clearInterval(intervalId);
-  }, [text, speed, onDone]);
+  }, [text, speed]);
+
+  useEffect(() => {
+    if (text && typedLength === text.length) {
+      onDone?.();
+    }
+  }, [typedLength, text, onDone]);
 
   const visibleText = text.slice(0, typedLength);
   const isTyping = typedLength < text.length;
