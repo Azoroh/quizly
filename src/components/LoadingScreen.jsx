@@ -11,6 +11,8 @@ export default function LoadingScreen({
   loadingStage,
   questionCount,
 }) {
+  const MAX_INPUT_CHARS = 12000;
+
   useEffect(() => {
     let cancelled = false;
 
@@ -43,7 +45,18 @@ export default function LoadingScreen({
         if (cancelled) return;
         dispatch({ type: "analyzingStage" });
 
-        const quiz = await generateQuiz(combinedText);
+        //truncate combinedText
+        const safeText = (combinedText || "").slice(0, MAX_INPUT_CHARS);
+
+        if (!safeText.trim()) {
+          dispatch({
+            type: "error",
+            payload: "No usable text was found in the provided material.",
+          });
+          return;
+        }
+
+        const quiz = await generateQuiz(safeText);
 
         if (cancelled) return;
 
