@@ -111,7 +111,18 @@ app.post("/api/generate-quiz", async (req, res) => {
         });
     } catch (error) {
         console.error("Quizly Generation Error:", error);
-        return res.status(500).json({ error: "Failed to generate quiz" });
+
+        const status = error?.status || 500;
+        const providerMessage = error?.error?.message;
+
+
+        if (status === 429) {
+            return res.status(429).json({
+                error: providerMessage || "AI is temporarily rate limited. Please try again in a few seconds."
+            })
+        }
+
+        return res.status(status).json({ error: providerMessage || "Failed to generate quiz" });
     }
 });
 
