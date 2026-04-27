@@ -12,6 +12,8 @@ export default function LoadingScreen({
   questionCount,
 }) {
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchQuiz() {
       dispatch({ type: "extractingStage" });
 
@@ -27,6 +29,7 @@ export default function LoadingScreen({
             .filter(Boolean)
             .join("\n\n");
         } catch (error) {
+          if (cancelled) return;
           console.error("File extraction failed:", error);
 
           dispatch({
@@ -37,15 +40,27 @@ export default function LoadingScreen({
           return;
         }
 
+        if (cancelled) return;
         dispatch({ type: "analyzingStage" });
 
         const quiz = await generateQuiz(combinedText);
 
+        if (cancelled) return;
+
         dispatch({ type: "finalizingStage" });
+
+        await wait(500);
+
+        if (cancelled) return;
         dispatch({ type: "readyStage" });
 
+        await wait(350);
+
+        if (cancelled) return;
         dispatch({ type: "ready", payload: quiz });
       } catch (err) {
+        if (cancelled) return;
+
         console.error("Quiz generation failed:", err);
         dispatch({
           type: "error",
@@ -54,6 +69,10 @@ export default function LoadingScreen({
       }
     }
     fetchQuiz();
+
+    return () => {
+      cancelled = true;
+    };
   }, [dispatch, inputText, uploadedFiles]);
 
   return (
@@ -76,4 +95,8 @@ export default function LoadingScreen({
       <div className="h-32 w-full bg-gradient-to-t from-primary/5 to-transparent absolute bottom-0 left-0 pointer-events-none"></div>
     </div>
   );
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
