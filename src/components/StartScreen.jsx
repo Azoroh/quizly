@@ -26,11 +26,11 @@ export default function StartScreen({
         {/* Glass Card */}
         <div className="glass-card w-full rounded-[2rem] p-6 md:p-8 border border-white/5 shadow-2xl flex flex-col gap-8">
           {/* Source Chip */}
-          <div className="flex justify-center gap-2">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,160px))] gap-3 md:gap-4 justify-center">
             {uploadedFiles.map((file) => (
               <div
                 key={file.id}
-                className="self-center inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary-container/5 border border-secondary/10 min-w-30 max-w-40"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary-container/5 border border-secondary/10 w-full"
               >
                 <span
                   className={`material-symbols-outlined text-sm ${file.name.endsWith(".pdf") ? "text-red-600" : "text-blue-600"}`}
