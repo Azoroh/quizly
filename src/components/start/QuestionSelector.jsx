@@ -15,11 +15,12 @@ export default function QuestionSelector({ dispatch, questionCount }) {
           <button
             key={count}
             onClick={() => handleSelectCount(count)}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
-              questionCount === count
-                ? "bg-primary text-on-primary segmented-control-active"
-                : "text-on-surface-variant hover:text-on-surface"
-            }`}
+            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all transform duration-200
+              ${
+                questionCount === count
+                  ? "bg-primary text-on-primary segmented-control-active hover:-translate-y-1"
+                  : "text-on-surface-variant hover:text-on-surface"
+              }`}
           >
             {count}
           </button>

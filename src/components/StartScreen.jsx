@@ -6,6 +6,7 @@ import StartButton from "./start/StartButton";
 import { getSourceStatus } from "../utils/getSourceStatus";
 import { buildExcludedSourcesMessage } from "../utils/buildExcludedSourcesMessage";
 import { useEffect, useMemo, useState } from "react";
+import Button from "./Button";
 
 export default function StartScreen({
   dispatch,
@@ -66,7 +67,7 @@ export default function StartScreen({
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
 
-      <StartHeader />
+      {/* <StartHeader /> */}
 
       <main className="relative z-10 w-full max-w-2xl px-4 sm:px-6 pt-24 sm:pt-28 pb-10 sm:pb-12 flex flex-col items-center text-center">
         {shouldRenderToast && toastMessage ? (
@@ -146,17 +147,28 @@ export default function StartScreen({
 
           <QuestionSelector dispatch={dispatch} questionCount={questionCount} />
 
-          <StartButton
-            onClick={() => dispatch({ type: "startQuiz" })}
-            questions={questions}
-          />
+          <div className="flex gap-2">
+            <Button
+              onClick={() => dispatch({ type: "newQuiz" })}
+              className="group relative flex items-center justify-center w-16 h-14 rounded-full bg-orange-500 hover:bg-orange-700 text-on-primary shadow-lg shadow-primary/20 active:scale-[0.98] transition-all"
+            >
+              <span className="material-symbols-outlined leading-none text-xl transform transition duration-300 group-hover:-translate-x-1.5 group-hover:scale-200">
+                arrow_back
+              </span>
+            </Button>
+
+            <StartButton
+              onClick={() => dispatch({ type: "startQuiz" })}
+              questions={questions}
+            />
+          </div>
         </div>
       </main>
 
       {/* Bottom Line */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl opacity-10 pointer-events-none">
+      {/* <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl opacity-10 pointer-events-none">
         <div className="h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent"></div>
-      </div>
+      </div> */}
     </div>
   );
 }
