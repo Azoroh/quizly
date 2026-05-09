@@ -40,15 +40,9 @@ export default function ResultScreen({
           payload: err.message || "Failed to generate AI Summary",
         });
       }
-      // } finally {
-      //   dispatch({ type: "idleSummary" });
-      // }
     }
 
     fetchSummary();
-    // if (reviewPayload === 0 && aiSummaryStatus === "idle") {
-    //   dispatch({ type: "errorSummary" });
-    // }
   }, [dispatch, reviewPayload, aiSummaryStatus]);
 
   return (
@@ -59,7 +53,7 @@ export default function ResultScreen({
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
 
       {/*  <ResultHeader /> */}
-      <StartHeader />
+      {/* <StartHeader /> */}
 
       <main className="flex-grow flex items-start sm:items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-10">
         <div className="w-full max-w-3xl">

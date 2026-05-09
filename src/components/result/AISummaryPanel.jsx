@@ -13,7 +13,7 @@ export default function AISummaryPanel({
   const isReadyorError = isReady || isError;
 
   return (
-    <div className="w-full bg-surface-container-low/30 rounded-2xl p-4 sm:p-6 md:p-8 mb-8 sm:mb-10 border border-primary/10 relative overflow-hidden">
+    <div className="w-full bg-surface-container-low/30 rounded-2xl p-3 sm:p-6 md:p-8 mb-6 sm:mb-10 border border-primary/10 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-primary/40 to-transparent"></div>
 
       <div
@@ -100,14 +100,14 @@ export default function AISummaryPanel({
         ) : null}
 
         {isReady && isTypingDone ? (
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1">
             <span className="text-[9px] sm:text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">
               Focus areas:
             </span>
             {focusAreas?.map((area) => (
               <div
                 key={area}
-                className="bg-surface-container-highest/40 text-on-surface-variant text-[10px] sm:text-[11px] font-semibold px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full border border-outline-variant/10"
+                className="bg-surface-container-highest/40 text-on-surface-variant text-[9px] sm:text-[11px] font-semibold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border border-outline-variant/10"
               >
                 {area}
               </div>
@@ -149,7 +149,7 @@ function TypewriterSummary({ text, speed = 18, onDone }) {
   const isTyping = typedLength < text.length;
 
   return (
-    <p className="text-on-surface-variant text-sm md:text-base leading-relaxed mb-6 max-w-2xl">
+    <p className="text-on-surface-variant text-sm md:text-base leading-relaxed mb-4 max-w-2xl">
       {visibleText}
       {isTyping ? (
         <span className="inline-block w-2 h-5 ml-1 translate-y-1 bg-primary/70 animate-pulse" />
