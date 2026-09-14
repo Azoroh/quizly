@@ -1,4 +1,8 @@
-import { getRandomItems } from "./utils/getRandomItems.js";
+import { createContext, useContext, useReducer } from "react";
+import { getRandomItems } from "../utils/getRandomItems.js";
+import { useLocalStorage } from "../hooks/useLocalStorage.js";
+
+const QuizContext = createContext()
 
 const POINTS_PER_QUESTION = 10;
 const SECS_PER_QUESTION = 30;
@@ -7,28 +11,23 @@ const initialState = {
 	totalQuestions: [],
 	questions: [],
 	questionCount: 5,
-
-	// "landing" | "loading" | "ready" | "active" | "finished" | "error"
-	status: "landing",
+	status: "landing", 	// "landing" | "loading" | "ready" | "active" | "finished" | "error"
 	index: null,
 	answer: null,
 	points: 0,
 	remainingSeconds: 0,
 	quizSeconds: 0,
-	inputText: "",
+  inputText: "",
 
 	error: null,
-
-	//loading stage states
 	loadingStage: "",
 
 	reviewPayload: [],
-	// "idle" | "loading" | "ready" | "error"
-	aiSummaryStatus: "idle",
+	aiSummaryStatus: "idle", 	// "idle" | "loading" | "ready" | "error"
 	aiSummary: "",
 	focusAreas: [],
 
-	// TODO: upload feature
+	// NOTE: upload feature
 	uploadedFiles: [],
 	sourceUsage: [],
 	hasShownSourceToast: false,
@@ -260,4 +259,36 @@ function reducer(state, action) {
 	}
 }
 
-function QuizProvider() {}
+export function QuizProvider({ children }) {
+  const [state, dispatch] = useReducer(reducer, initialState, init);
+
+ 	useLocalStorage("highscore", highScore);
+
+  const maxPossiblePoints = state.questions.length * POINTS_PER_QUESTION;
+	const correctAnswers = state.points / POINTS_PER_QUESTION;
+  const accuracyPercent = maxPossiblePoints === 0
+    ? 0
+    : (state.points / maxPossiblePoints) * 100;
+
+  return (
+    <QuizContext.Provider
+      value={{
+        ...state,
+        dispatch,
+        maxPossiblePoints,
+        correctAnswers,
+        accuracyPercent
+}}
+    >
+      {children}
+    </QuizContext.Provider>
+  )
+}
+
+
+export function useQuiz() {
+  const context = useContext(QuizContext)
+  if (context === undefined) throw new Error("useQuiz must be used within a QuizProvider");
+
+  return context
+}
