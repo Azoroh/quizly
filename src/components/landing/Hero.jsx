@@ -1,6 +1,9 @@
 import { useRef } from "react";
+import { useQuiz } from "../../context/QuizContext";
 
-export default function Hero({ dispatch, inputText, uploadedFiles }) {
+export default function Hero() {
+  const { dispatch, inputText, uploadedFiles } = useQuiz();
+
   const fileInputRef = useRef(null);
 
   const isDisabled =

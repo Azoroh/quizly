@@ -1,21 +1,26 @@
-import StartHeader from "./start/StartHeader";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuiz } from "../context/QuizContext";
+
+// import StartHeader from "./start/StartHeader";
 import StartHero from "./start/StartHero";
 import SummaryStats from "./start/SummaryStats";
 import QuestionSelector from "./start/QuestionSelector";
 import StartButton from "./start/StartButton";
 import { getSourceStatus } from "../utils/getSourceStatus";
 import { buildExcludedSourcesMessage } from "../utils/buildExcludedSourcesMessage";
-import { useEffect, useMemo, useState } from "react";
 import Button from "./Button";
 
-export default function StartScreen({
-  dispatch,
-  questionCount,
-  questions,
-  remainingSeconds,
-  sourceUsage = [],
-  hasShownSourceToast,
-}) {
+export default function StartScreen() {
+  const {
+    dispatch,
+    questionCount,
+    questions,
+    remainingSeconds,
+    sourceUsage = [],
+    hasShownSourceToast,
+  } = useQuiz();
+
   const excludedSources = useMemo(
     () => sourceUsage.filter((source) => !source.wasIncluded),
     [sourceUsage],

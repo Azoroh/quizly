@@ -8,91 +8,29 @@ import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
 import ErrorScreen from "./components/ErrorMessage.jsx";
 
-
-function AppLegacy() {
-
-	return (
-		<div>
-			{status === "landing" && (
-				<LandingScreen
-					dispatch={dispatch}
-					inputText={inputText}
-					uploadedFiles={uploadedFiles}
-				/>
-			)}
-
-			{status === "loading" && (
-				<LoadingScreen
-					dispatch={dispatch}
-					uploadedFiles={uploadedFiles}
-					loadingStage={loadingStage}
-					questionCount={questionCount}
-					inputText={inputText}
-				/>
-			)}
-
-			{status === "error" && (
-				<ErrorScreen
-					onTryAgain={() => dispatch({ type: "generateQuiz" })}
-					onBackToHome={() => dispatch({ type: "newQuiz" })}
-					error={error}
-				/>
-			)}
-
-			{status === "ready" && (
-				<StartScreen
-					dispatch={dispatch}
-					questionCount={questionCount}
-					questions={questions}
-					remainingSeconds={remainingSeconds}
-					sourceUsage={sourceUsage}
-					hasShownSourceToast={hasShownSourceToast}
-				/>
-			)}
-
-			{status === "active" && (
-				<QuestionScreen
-					dispatch={dispatch}
-					curQuestion={questions?.at(index)}
-					answer={answer}
-					questions={questions}
-					index={index}
-					remainingSeconds={remainingSeconds}
-				/>
-			)}
-
-			{status === "finished" && (
-				<ResultScreen
-					dispatch={dispatch}
-					points={points}
-					maxPossiblePoints={maxPossiblePoints}
-					highScore={highScore}
-					correctAnswers={correctAnswers}
-					accuracyPercent={accuracyPercent}
-					quizSeconds={quizSeconds}
-					reviewPayload={reviewPayload}
-					aiSummaryStatus={aiSummaryStatus}
-					aiSummary={aiSummary}
-					focusAreas={focusAreas}
-				/>
-			)}
-		</div>
-	);
-}
-
 export default function App() {
-	return (
-		<QuizProvider>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<LandingScreen />} />
-					<Route path="/loading" element={<LoadingScreen />} />
-					<Route path="/ready" element={<StartScreen />} />
-					<Route path="/quiz" element={<QuestionScreen />} />
-					<Route path="/results" element={<ResultScreen />} />
-					<Route path="*" element={<ErrorScreen />} />
-				</Routes>
-			</BrowserRouter>
-		</QuizProvider>
-	);
+  return (
+    <QuizProvider>
+      <BrowserRouter>
+        <div className="min-h-screen bg-[#08080a] text-white">
+          <Routes>
+            {/* The Landing Route (will also conditionally render the Loading screen) */}
+            <Route path="/" element={<LandingScreen />} />
+
+            {/* The pre-quiz ready screen */}
+            <Route path="/ready" element={<StartScreen />} />
+
+            {/* The active quiz interface */}
+            <Route path="/quiz" element={<QuestionScreen />} />
+
+            {/* The post-quiz results and AI summary */}
+            <Route path="/results" element={<ResultScreen />} />
+
+            {/* Catch-all for any bad URLs */}
+            <Route path="*" element={<ErrorScreen />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </QuizProvider>
+  );
 }
