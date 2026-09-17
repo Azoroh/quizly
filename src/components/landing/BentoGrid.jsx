@@ -1,3 +1,5 @@
+import { FileText, Laptop, Smartphone, Sparkles } from "lucide-react";
+
 export default function BentoGrid() {
   return (
     <section className="max-w-7xl mx-auto mt-40 px-6">

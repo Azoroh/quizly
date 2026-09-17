@@ -1,17 +1,18 @@
 import { useEffect } from "react";
-import LoadingHeader from "./loading/LoadingHeader";
+import { useNavigate } from "react-router-dom";
+import { useQuiz } from "../context/QuizContext";
+
 import LoadingCard from "./loading/LoadingCard";
 import { extractFileText } from "../services/extractFileText";
 import { generateQuiz } from "../services/generateQuiz";
 import { buildCappedStudyMaterial } from "../utils/buildCappedStudyMaterial";
 
-export default function LoadingScreen({
-  dispatch,
-  inputText,
-  uploadedFiles,
-  loadingStage,
-  questionCount,
-}) {
+export default function LoadingScreen() {
+  const { dispatch, inputText, uploadedFiles, loadingStage, questionCount } =
+    useQuiz();
+
+  const navigate = useNavigate();
+
   const MAX_INPUT_CHARS = 12000;
 
   useEffect(() => {
@@ -44,11 +45,6 @@ export default function LoadingScreen({
             type: "sourceUsage",
             payload: cappedMaterial.sources,
           });
-
-          console.log(cappedMaterial);
-          console.log(
-            cappedMaterial.sources.filter((source) => source.wasIncluded),
-          );
         } catch (error) {
           if (cancelled) return;
           console.error("File extraction failed:", error);
@@ -75,7 +71,6 @@ export default function LoadingScreen({
         const quiz = await generateQuiz(safeText);
 
         if (cancelled) return;
-
         dispatch({ type: "finalizingStage" });
 
         await wait(500);
@@ -86,7 +81,9 @@ export default function LoadingScreen({
         await wait(350);
 
         if (cancelled) return;
+
         dispatch({ type: "ready", payload: quiz });
+        navigate("/ready");
       } catch (err) {
         if (cancelled) return;
 
@@ -102,7 +99,7 @@ export default function LoadingScreen({
     return () => {
       cancelled = true;
     };
-  }, [dispatch, inputText, uploadedFiles]);
+  }, [dispatch, inputText, uploadedFiles, navigate]);
 
   return (
     <div className="dark bg-background text-on-surface font-body min-h-screen flex flex-col overflow-hidden relative">
@@ -110,8 +107,6 @@ export default function LoadingScreen({
       <div className="fixed inset-0 glow-bg pointer-events-none z-0"></div>
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
-
-      {/* <LoadingHeader /> */}
 
       <main className="flex-grow flex items-start sm:items-center justify-center px-4 sm:px-6 pt-24 sm:pt-28 pb-10 relative z-10">
         <LoadingCard
