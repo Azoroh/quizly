@@ -85,7 +85,7 @@ export default function Footer() {
               Socials
             </h4>
             <a
-              className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="flex items-center justify-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
               href="https://twitter.com"
               target="_blank"
               rel="noreferrer"
@@ -94,7 +94,7 @@ export default function Footer() {
               Twitter / X
             </a>
             <a
-              className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="flex items-center justify-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
               href="https://github.com"
               target="_blank"
               rel="noreferrer"
@@ -103,7 +103,7 @@ export default function Footer() {
               GitHub
             </a>
             <a
-              className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="flex items-center justify-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
               href="https://discord.com"
               target="_blank"
               rel="noreferrer"

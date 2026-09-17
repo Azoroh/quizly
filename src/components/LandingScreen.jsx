@@ -1,9 +1,17 @@
+import { useQuiz } from "../context/QuizContext";
+import LoadingScreen from "./LoadingScreen";
 import Navbar from "./landing/Navbar";
 import Hero from "./landing/Hero";
 import BentoGrid from "./landing/BentoGrid";
 import Footer from "./landing/Footer";
 
 export default function LandingScreen() {
+  const { status } = useQuiz();
+
+  if (status === "loading") {
+    return <LoadingScreen />;
+  }
+
   return (
     <div className="bg-zinc-950 text-zinc-100 font-body selection:bg-primary/30 min-h-screen overflow-x-hidden dark">
       <Navbar />

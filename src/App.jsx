@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QuizProvider } from "./context/QuizContext.jsx";
 
 import LandingScreen from "./components/LandingScreen";
-// import LoadingScreen from "./components/LoadingScreen";
 import StartScreen from "./components/StartScreen";
 import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
@@ -14,7 +13,7 @@ export default function App() {
       <BrowserRouter>
         <div className="min-h-screen bg-[#08080a] text-white">
           <Routes>
-            {/* The Landing Route (will also conditionally render the Loading screen) */}
+            {/* The Landing Route (also renders the Loading screen while status === "loading") */}
             <Route path="/" element={<LandingScreen />} />
 
             {/* The pre-quiz ready screen */}
