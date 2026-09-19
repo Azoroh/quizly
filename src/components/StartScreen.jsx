@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuiz } from "../context/QuizContext";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import StartButton from "./start/StartButton";
@@ -11,6 +19,7 @@ import { formatTime } from "../utils/formatTime";
 import { FileText, Clock, Layers, ArrowLeft } from "lucide-react";
 
 export default function StartScreen() {
+  const navigate = useNavigate();
   const {
     dispatch,
     questionCount,
@@ -72,7 +81,6 @@ export default function StartScreen() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-start overflow-x-hidden relative px-4 sm:px-6 pt-20 sm:pt-28 pb-12">
-
       {/* Subtle background glows */}
       <div
         aria-hidden="true"
@@ -102,7 +110,6 @@ export default function StartScreen() {
 
       {/* ── Main card ───────────────────────────────────────────────────────── */}
       <Card className="w-full max-w-2xl bg-zinc-900 border-zinc-800 shadow-2xl shadow-black/60 gap-0 py-0">
-
         {/* Header */}
         <CardHeader className="px-6 pt-8 pb-6 border-b border-zinc-800">
           <div className="flex flex-col items-center text-center gap-3">
@@ -116,14 +123,14 @@ export default function StartScreen() {
             </CardTitle>
 
             <CardDescription className="text-zinc-400 text-sm sm:text-base max-w-sm leading-relaxed">
-              Quizly successfully generated questions from your study material. Review your sources below, then start when you're ready.
+              Quizly successfully generated questions from your study material.
+              Review your sources below, then start when you're ready.
             </CardDescription>
           </div>
         </CardHeader>
 
         {/* Body */}
         <CardContent className="px-6 pt-6 pb-2 flex flex-col gap-6">
-
           {/* ── Source document badges ───────────────────────────────────── */}
           {sourceUsage.length > 0 && (
             <section aria-label="Source documents">
@@ -169,12 +176,19 @@ export default function StartScreen() {
           <div className="grid grid-cols-3 gap-3">
             {[
               {
-                icon: <Layers className="w-5 h-5 text-zinc-400" strokeWidth={1.75} />,
+                icon: (
+                  <Layers
+                    className="w-5 h-5 text-zinc-400"
+                    strokeWidth={1.75}
+                  />
+                ),
                 label: "Questions",
                 value: `${questionCount}`,
               },
               {
-                icon: <Clock className="w-5 h-5 text-zinc-400" strokeWidth={1.75} />,
+                icon: (
+                  <Clock className="w-5 h-5 text-zinc-400" strokeWidth={1.75} />
+                ),
                 label: "Est. time",
                 value: timeLabel,
               },
@@ -244,7 +258,10 @@ export default function StartScreen() {
           <Button
             variant="outline"
             size="icon"
-            onClick={() => dispatch({ type: "newQuiz" })}
+            onClick={() => {
+              dispatch({ type: "newQuiz" });
+              navigate("/");
+            }}
             className="h-14 w-14 shrink-0 rounded-full border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100 transition-colors"
             aria-label="Back to home"
           >
@@ -252,7 +269,13 @@ export default function StartScreen() {
           </Button>
 
           {/* Start button — onClick preserved exactly */}
-          <StartButton onClick={() => dispatch({ type: "startQuiz" })} questions={questions} />
+          <StartButton
+            onClick={() => {
+              dispatch({ type: "startQuiz" });
+              navigate("/quiz");
+            }}
+            questions={questions}
+          />
         </CardFooter>
       </Card>
     </div>
