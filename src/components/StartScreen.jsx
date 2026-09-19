@@ -15,7 +15,7 @@ export default function StartScreen() {
     dispatch,
     questionCount,
     questions,
-    remainingSeconds,
+    // remainingSeconds,
     sourceUsage = [],
     hasShownSourceToast,
   } = useQuiz();
@@ -62,10 +62,13 @@ export default function StartScreen() {
   }
 
   // ── Derived display values ─────────────────────────────────────────────────
+
+  const estimatedSeconds = questionCount * 20;
+
   const timeLabel =
-    remainingSeconds < 60
-      ? `${formatTime(remainingSeconds, true)} sec`
-      : `${formatTime(remainingSeconds, true)} min`;
+    estimatedSeconds < 60
+      ? `${formatTime(estimatedSeconds, true)} sec`
+      : `${formatTime(estimatedSeconds, true)} min`;
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-start overflow-x-hidden relative px-4 sm:px-6 pt-20 sm:pt-28 pb-12">

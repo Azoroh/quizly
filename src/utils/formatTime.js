@@ -9,10 +9,3 @@ export function formatTime(seconds, short = false) {
 
     return `${String(mins).padStart(2, "0")} : ${String(secs).padStart(2, "0")}`;
 }
-
-// export function formatTime(seconds) {
-//     const mins = String(Math.floor(seconds / 60)).padStart(2, '0')
-//     const secs = String(seconds % 60).padStart(2, '0')
-
-//     return `${mins} : ${secs}`
-// }
