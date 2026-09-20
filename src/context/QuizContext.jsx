@@ -264,6 +264,7 @@ export function QuizProvider({ children }) {
 
   useLocalStorage("highscore", state.highScore);
 
+  const curQuestion = state.questions[state.index];
   const maxPossiblePoints = state.questions.length * POINTS_PER_QUESTION;
   const correctAnswers = state.points / POINTS_PER_QUESTION;
   const accuracyPercent =
@@ -277,6 +278,7 @@ export function QuizProvider({ children }) {
         maxPossiblePoints,
         correctAnswers,
         accuracyPercent,
+        curQuestion,
       }}
     >
       {children}

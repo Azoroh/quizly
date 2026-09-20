@@ -1,13 +1,14 @@
+import { useQuiz } from "@/context/QuizContext";
 import QuestionTimer from "./QuestionTimer";
+import { getProgressPercent } from "@/utils/getProgressPercent";
 
-export default function QuestionHeader({
-  current,
-  total,
-  remainingSeconds,
-  dispatch,
-  progress,
-}) {
+export default function QuestionHeader() {
   // const progress = Math.round((current / total) * 100);
+
+  const { dispatch, remainingSeconds, index, questions, answer } = useQuiz();
+  const current = index + 1;
+  const total = questions.length;
+  const progress = getProgressPercent(index, answer, questions.length);
 
   return (
     <div className="flex flex-col gap-5 sm:gap-6 mb-8 sm:mb-10">

@@ -1,12 +1,22 @@
+import { useQuiz } from "@/context/QuizContext";
+
 const letters = ["A", "B", "C", "D"];
 
-export default function OptionsList({
-  answer,
-  dispatch,
-  options,
-  correctOption,
-}) {
-  // console.log(correctOption);
+{
+  /* <OptionsList
+  answer={answer}
+  dispatch={dispatch}
+  options={curQuestion?.options}
+  correctOption={curQuestion?.correctOption}
+/>; */
+}
+
+export default function OptionsList() {
+  const {
+    answer,
+    dispatch,
+    curQuestion: { options = [], correctOption = null } = {},
+  } = useQuiz();
 
   const hasSelected = answer !== null;
 
