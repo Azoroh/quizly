@@ -60,6 +60,7 @@ function reducer(state, action) {
       return {
         ...state,
         status: "loading",
+        error: null,
       };
 
     case "ready": {

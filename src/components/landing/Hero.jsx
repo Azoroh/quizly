@@ -52,7 +52,8 @@ export default function Hero() {
     if (e.dataTransfer.files?.length) addFiles(e.dataTransfer.files);
   }
 
-  function handleGenerate() {
+  function handleGenerate(e) {
+    if (e) e.preventDefault();
     if (isDisabled) return;
     dispatch({ type: "generateQuiz" });
   }

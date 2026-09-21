@@ -42,12 +42,15 @@ export default function LandingScreen() {
     setShowToast(false);
   }
 
-  if (status === "loading") {
-    return <LoadingScreen />;
-  }
-
   return (
     <div className="bg-zinc-950 text-zinc-100 font-body selection:bg-primary/30 min-h-screen overflow-x-hidden dark">
+      {/* ── Loading overlay ─────────────────────────────────────────────────── */}
+      {status === "loading" && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <LoadingScreen />
+        </div>
+      )}
+
       {/* ── Error toast ──────────────────────────────────────────────────────── */}
       {shouldRenderToast && error && (
         <div
