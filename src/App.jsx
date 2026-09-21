@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QuizProvider } from "./context/QuizContext.jsx";
+import { Toaster } from "./components/ui/sonner";
 
 import LandingScreen from "./components/LandingScreen";
 import StartScreen from "./components/StartScreen";
@@ -28,6 +29,12 @@ export default function App() {
             {/* Catch-all for any bad URLs */}
             <Route path="*" element={<ErrorScreen />} />
           </Routes>
+          <Toaster
+            theme="dark"
+            position="top-center"
+            closeButton={true}
+            duration={4000}
+          />
         </div>
       </BrowserRouter>
     </QuizProvider>
