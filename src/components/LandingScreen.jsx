@@ -52,7 +52,7 @@ export default function LandingScreen() {
       {shouldRenderToast && error && (
         <div
           onTransitionEnd={handleToastTransitionEnd}
-          className={`fixed top-5 sm:top-6 left-1/2 -translate-x-1/2 z-50
+          className={`fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 z-[60]
             w-[min(92vw,640px)] flex items-start gap-3
             rounded-2xl border border-red-500/30 bg-red-500/10
             backdrop-blur-xl px-4 py-3.5
