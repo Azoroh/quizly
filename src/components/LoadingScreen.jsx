@@ -48,7 +48,7 @@ export default function LoadingScreen() {
         } catch (error) {
           if (cancelled) return;
           console.error("File extraction failed:", error);
-
+          navigate("/");
           dispatch({
             type: "error",
             payload:
@@ -61,6 +61,7 @@ export default function LoadingScreen() {
         dispatch({ type: "analyzingStage" });
 
         if (!safeText.trim()) {
+          navigate("/");
           dispatch({
             type: "error",
             payload: "No usable text was found in the provided material.",
@@ -88,6 +89,7 @@ export default function LoadingScreen() {
         if (cancelled) return;
 
         console.error("Quiz generation failed:", err);
+        navigate("/");
         dispatch({
           type: "error",
           payload: err.message || "Failed to generate quiz",

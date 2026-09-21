@@ -191,6 +191,13 @@ function reducer(state, action) {
         error: action.payload,
       };
 
+    case "clearError":
+      return {
+        ...state,
+        status: "landing",
+        error: null,
+      };
+
     case "loadSummary":
       return {
         ...state,
