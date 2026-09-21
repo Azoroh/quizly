@@ -267,7 +267,6 @@ export default function StartScreen() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-
           {/* Start button — onClick preserved exactly */}
           <StartButton
             onClick={() => {

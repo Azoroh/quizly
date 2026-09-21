@@ -1,7 +1,15 @@
-export default function QuestionCard({ children }) {
+import { Card } from "../ui/card";
+import { cn } from "@/lib/utils";
+
+export default function QuestionCard({ children, className }) {
   return (
-    <div className="glass-card glow-effect rounded-[1.75rem] sm:rounded-[2rem] p-4 sm:p-8 md:p-12 relative overflow-hidden">
+    <Card
+      className={cn(
+        "w-full max-w-2xl bg-zinc-900 border-zinc-800/80 shadow-2xl shadow-black/60 rounded-2xl p-6 sm:p-8 md:p-10 relative overflow-hidden gap-0",
+        className,
+      )}
+    >
       {children}
-    </div>
+    </Card>
   );
 }
