@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useQuiz } from "../context/QuizContext";
 
 import LoadingCard from "./loading/LoadingCard";
@@ -23,6 +24,7 @@ export default function LoadingScreen() {
 
       try {
         let safeText;
+        let sources = [];
 
         try {
           const extractedFiles = await Promise.all(
@@ -40,6 +42,7 @@ export default function LoadingScreen() {
           });
 
           safeText = cappedMaterial.combinedText;
+          sources = cappedMaterial.sources || [];
 
           dispatch({
             type: "sourceUsage",
@@ -82,6 +85,19 @@ export default function LoadingScreen() {
         if (cancelled) return;
 
         dispatch({ type: "ready", payload: quiz });
+
+        const includedSources = sources.filter((s) => s.wasIncluded);
+        const sourceCount =
+          includedSources.length > 0 ? includedSources.length : sources.length;
+        const description =
+          sourceCount > 0
+            ? `Parsed ${sourceCount} source${sourceCount > 1 ? "s" : ""} and built your custom quiz.`
+            : "Parsed sources and built your custom quiz.";
+
+        toast.success("Quiz Generated Successfully!", {
+          description,
+        });
+
         navigate("/ready");
       } catch (err) {
         if (cancelled) return;
