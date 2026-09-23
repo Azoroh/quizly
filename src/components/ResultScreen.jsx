@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import ScoreDisplay from "./result/ScoreDisplay";
 import SummaryStats from "./result/SummaryStats";
@@ -40,6 +41,11 @@ export default function ResultScreen() {
         dispatch({
           type: "errorSummary",
           payload: err.message || "Failed to generate AI Summary",
+        });
+
+        toast.error("AI Insight Failed", {
+          description:
+            "We couldn't generate your review this time. Our servers might be busy.",
         });
       }
     }
