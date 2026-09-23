@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useQuiz } from "../context/QuizContext";
+import { toast } from "sonner";
 
 import {
   Card,
@@ -20,16 +21,32 @@ import { FileText, Clock, Layers, ArrowLeft } from "lucide-react";
 
 export default function StartScreen() {
   const navigate = useNavigate();
+  const hasRedirected = useRef(false);
+
   const {
     dispatch,
     questionCount,
     questions,
-    // remainingSeconds,
     sourceUsage = [],
     hasShownSourceToast,
+    quiz,
   } = useQuiz();
 
-  // ── Toast logic (preserved exactly) ───────────────────────────────────────
+  const hasNoQuiz = !quiz || (Array.isArray(quiz) && quiz.length === 0);
+
+  if (hasNoQuiz) {
+    if (!hasRedirected.current) {
+      hasRedirected.current = true;
+      toast.error("No active quiz found", {
+        description: "Please generate a quiz from your study material first.",
+      });
+      navigate("/", { replace: true });
+    }
+    // Instantly render the Navigate component to switch routes cleanly without flashing
+    return <Navigate to="/" replace />;
+  }
+
+  // ── Toast logic ───────────────────────────────────────
   const excludedSources = useMemo(
     () => sourceUsage.filter((source) => !source.wasIncluded),
     [sourceUsage],
