@@ -32,7 +32,11 @@ export default function StartScreen() {
     quiz,
   } = useQuiz();
 
-  const hasNoQuiz = !quiz || (Array.isArray(quiz) && quiz.length === 0);
+  // Check if quiz and questions are truly missing (ignoring initial mount race condition)
+  const hasNoQuiz =
+    (!quiz && (!questions || questions.length === 0)) ||
+    (Array.isArray(quiz) && quiz.length === 0) ||
+    (quiz?.questions && quiz.questions.length === 0);
 
   if (hasNoQuiz) {
     if (!hasRedirected.current) {
