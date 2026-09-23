@@ -1,13 +1,15 @@
 import { useQuiz } from "@/context/QuizContext";
 import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function QuestionFooter() {
   const { answer, index, questions, dispatch } = useQuiz();
+  const navigate = useNavigate();
   const hasSelected = answer !== null;
 
   const buttonText =
-    index !== questions.length - 1 ? "Next Question" : "Final Question";
+    index !== questions.length - 1 ? "Next Question" : "Finish Quiz";
 
   return (
     <div className="flex items-center justify-stretch sm:justify-end pt-5 sm:pt-6 border-t border-zinc-800/80">
@@ -16,7 +18,10 @@ export default function QuestionFooter() {
         onClick={
           index !== questions.length - 1
             ? () => dispatch({ type: "nextQuestion" })
-            : () => dispatch({ type: "finish" })
+            : () => {
+                dispatch({ type: "finish" });
+                navigate("/results");
+              }
         }
         className={`w-full sm:w-auto h-12 px-6 sm:px-8 rounded-xl font-semibold text-sm sm:text-base gap-2 transition-all duration-200 ${
           hasSelected
