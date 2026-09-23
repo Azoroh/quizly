@@ -50,47 +50,6 @@ export default function StartScreen() {
     return <Navigate to="/" replace />;
   }
 
-  // ── Toast logic ───────────────────────────────────────
-  const excludedSources = useMemo(
-    () => sourceUsage.filter((source) => !source.wasIncluded),
-    [sourceUsage],
-  );
-
-  const toastMessage = useMemo(
-    () => buildExcludedSourcesMessage(excludedSources),
-    [excludedSources],
-  );
-
-  const [showToast, setShowToast] = useState(false);
-  const [shouldRenderToast, setShouldRenderToast] = useState(false);
-
-  useEffect(() => {
-    if (!toastMessage || hasShownSourceToast) return;
-
-    let renderTimeoutId;
-    let enterTimeoutId;
-    let hideTimeoutId;
-
-    renderTimeoutId = setTimeout(() => setShouldRenderToast(true), 0);
-
-    enterTimeoutId = setTimeout(() => {
-      setShowToast(true);
-      dispatch({ type: "shownSourceToast" });
-    }, 500);
-
-    hideTimeoutId = setTimeout(() => setShowToast(false), 4000);
-
-    return () => {
-      clearTimeout(renderTimeoutId);
-      clearTimeout(enterTimeoutId);
-      clearTimeout(hideTimeoutId);
-    };
-  }, [toastMessage, dispatch]);
-
-  function handleToastTransitionEnd() {
-    if (!showToast) setShouldRenderToast(false);
-  }
-
   // ── Derived display values ─────────────────────────────────────────────────
 
   const estimatedSeconds = questionCount * 20;
@@ -111,23 +70,6 @@ export default function StartScreen() {
         aria-hidden="true"
         className="fixed bottom-[-15%] right-[-10%] w-[45%] h-[45%] bg-indigo-600/5 blur-[140px] rounded-full pointer-events-none"
       />
-
-      {/* ── Excluded-sources toast ──────────────────────────────────────────── */}
-      {shouldRenderToast && toastMessage ? (
-        <div
-          onTransitionEnd={handleToastTransitionEnd}
-          className={`fixed top-20 sm:top-24 left-1/2 -translate-x-1/2 z-50
-            w-[min(92vw,680px)] rounded-2xl border border-amber-400/20
-            bg-amber-500/10 backdrop-blur-xl px-4 py-3
-            shadow-[0_20px_50px_rgba(0,0,0,0.35)]
-            transition-all duration-300 ease-out
-            ${showToast ? "translate-y-0 opacity-100" : "-translate-y-6 opacity-0 pointer-events-none"}`}
-        >
-          <p className="text-sm text-amber-100/90 font-medium leading-relaxed">
-            {toastMessage}
-          </p>
-        </div>
-      ) : null}
 
       {/* ── Main card ───────────────────────────────────────────────────────── */}
       <Card className="w-full max-w-2xl bg-zinc-900 border-zinc-800 shadow-2xl shadow-black/60 gap-0 py-0">
