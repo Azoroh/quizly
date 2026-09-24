@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuiz } from "../context/QuizContext";
 // import { toast } from "sonner";
@@ -16,7 +15,7 @@ import { Button } from "./ui/button";
 import StartButton from "./start/StartButton";
 import { getSourceStatus } from "../utils/getSourceStatus";
 import { formatTime } from "../utils/formatTime";
-import { FileText, Clock, Layers, ArrowLeft } from "lucide-react";
+import { FileText, Clock, Layers, ArrowLeft, LineChart } from "lucide-react";
 
 export default function StartScreen() {
   const navigate = useNavigate();
@@ -130,17 +129,10 @@ export default function StartScreen() {
               },
               {
                 icon: (
-                  <svg
+                  <LineChart
                     className="w-5 h-5 text-zinc-400"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
                     strokeWidth={1.75}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-                  </svg>
+                  />
                 ),
                 label: "Difficulty",
                 value: "Medium",
