@@ -17,7 +17,12 @@ export default function Hero() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const [activeTab, setActiveTab] = useState("paste");
+  const [activeTab, setActiveTab] = useState(() => {
+    // if files already exist, default to PDF tab
+    if (uploadedFiles?.length > 0) return "pdf";
+    // Otherwise, default to the paste tab
+    return "paste";
+  });
   const [isDraggingFile, setIsDraggingFile] = useState(false);
 
   const isLoading = status === "loading";

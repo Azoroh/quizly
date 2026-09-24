@@ -127,13 +127,13 @@ export default function LoadingCard({
                   }`}
                 >
                   {status === "done" && (
-                    <Check className="w-4 h-4 text-emerald-400" />
+                    <Check className="w-4 h-4 text-emerald-400 m-auto" />
                   )}
                   {status === "active" && (
-                    <Loader2 className="w-4 h-4 text-white animate-spin" />
+                    <Loader2 className="w-4 h-4 text-white animate-spin origin-center m-auto" />
                   )}
                   {status === "upcoming" && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-zinc-700" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-zinc-700 m-auto" />
                   )}
                 </div>
 
