@@ -7,6 +7,7 @@ import StartScreen from "./components/StartScreen";
 import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
 import ErrorScreen from "./components/ErrorMessage.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 export default function App() {
   return (
