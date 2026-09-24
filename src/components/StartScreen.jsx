@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState, useRef } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuiz } from "../context/QuizContext";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 import {
   Card,
@@ -15,40 +15,13 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import StartButton from "./start/StartButton";
 import { getSourceStatus } from "../utils/getSourceStatus";
-import { buildExcludedSourcesMessage } from "../utils/buildExcludedSourcesMessage";
 import { formatTime } from "../utils/formatTime";
 import { FileText, Clock, Layers, ArrowLeft } from "lucide-react";
 
 export default function StartScreen() {
   const navigate = useNavigate();
-  const hasRedirected = useRef(false);
 
-  const {
-    dispatch,
-    questionCount,
-    questions,
-    sourceUsage = [],
-    hasShownSourceToast,
-    quiz,
-  } = useQuiz();
-
-  // Check if quiz and questions are truly missing (ignoring initial mount race condition)
-  const hasNoQuiz =
-    (!quiz && (!questions || questions.length === 0)) ||
-    (Array.isArray(quiz) && quiz.length === 0) ||
-    (quiz?.questions && quiz.questions.length === 0);
-
-  if (hasNoQuiz) {
-    if (!hasRedirected.current) {
-      hasRedirected.current = true;
-      toast.error("No active quiz found", {
-        description: "Please generate a quiz from your study material first.",
-      });
-      navigate("/", { replace: true });
-    }
-    // Instantly render the Navigate component to switch routes cleanly without flashing
-    return <Navigate to="/" replace />;
-  }
+  const { dispatch, questionCount, questions, sourceUsage = [] } = useQuiz();
 
   // ── Derived display values ─────────────────────────────────────────────────
 
