@@ -98,7 +98,7 @@ export default function LoadingScreen() {
           description,
         });
 
-        navigate("/ready");
+        navigate("/overview");
       } catch (err) {
         if (cancelled) return;
 

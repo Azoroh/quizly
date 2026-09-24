@@ -26,7 +26,7 @@ export default function Hero() {
     (inputText.trim().length < 50 && (uploadedFiles?.length ?? 0) < 1);
 
   useEffect(() => {
-    if (status === "ready") navigate("/ready");
+    if (status === "ready") navigate("/overview");
   }, [status, navigate]);
 
   function addFiles(fileList) {

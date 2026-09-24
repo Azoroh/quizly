@@ -17,18 +17,17 @@ export default function App() {
             {/* The Landing Route (also renders the Loading screen while status === "loading") */}
             <Route path="/" element={<LandingScreen />} />
 
-            {/* The pre-quiz ready screen */}
-            <Route path="/ready" element={<StartScreen />} />
-
-            {/* The active quiz interface */}
-            <Route path="/quiz" element={<QuestionScreen />} />
-
-            {/* The post-quiz results and AI summary */}
-            <Route path="/results" element={<ResultScreen />} />
+            {/* Protected Routes Wrapper */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/overview" element={<StartScreen />} />
+              <Route path="/quiz" element={<QuestionScreen />} />
+              <Route path="/results" element={<ResultScreen />} />
+            </Route>
 
             {/* Catch-all for any bad URLs */}
             <Route path="*" element={<ErrorScreen />} />
           </Routes>
+
           <Toaster
             theme="dark"
             position="top-center"

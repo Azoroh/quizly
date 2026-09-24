@@ -87,7 +87,7 @@ export default function ResultScreen() {
 
           <ResultActions
             onRestart={() => {
-              navigate("/ready");
+              navigate("/overview");
               dispatch({ type: "restart" });
             }}
             onNewQuiz={() => {
