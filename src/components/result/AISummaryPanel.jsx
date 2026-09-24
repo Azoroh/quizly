@@ -27,7 +27,7 @@ export default function AISummaryPanel({
     >
       <div className="overflow-hidden">
         {/* Inner Panel Card */}
-        <div className="w-full bg-zinc-800/30 rounded-2xl p-4 sm:p-6 md:p-8 border border-violet-500/10 relative">
+        <div className="w-full bg-zinc-800/30 rounded-2xl p-4 sm:p-6 md:p-8 border border-violet-500/10 relative overflow-hidden">
           {/* Accent Line */}
           <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-violet-500/50 to-transparent"></div>
 
