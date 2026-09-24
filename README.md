@@ -2,18 +2,32 @@
 
 > Turn your study material into a personalized AI-powered quiz — instantly.
 
-Quizly is a premium AI study tool that lets users paste notes or upload a PDF/document and generates a comprehensive, personalized quiz from that material.
+Quizly is a premium AI study tool that allows users to paste notes or upload documents (PDF/DOCX) to generate a comprehensive, personalized multiple-choice quiz.
 
-🔗 **[Live Preview](https://jay-quizly-v2.netlify.app)**
+🔗 **[Live Preview](https://your-vercel-project-url.vercel.app)** _(Update this with your live Vercel URL)_
 
 ---
 
 ## 🚀 Tech Stack
 
-- **React** + **Vite**
-- **Tailwind CSS v3**
-- **Google Fonts** — Inter, Manrope
-- **Material Symbols** — Google icon library
+**Frontend**
+
+- **React 18** + **Vite**
+- **React Router DOM** (with Protected Routes)
+- **Context API** (Global State Management)
+
+**Backend & AI**
+
+- **Vercel Serverless Functions** (`/api` routes)
+- **Groq SDK** (Powered by the `openai/gpt-oss-20b` model)
+
+**UI & Styling**
+
+- **Tailwind CSS v3** (Zinc Dark Theme Aesthetic)
+- **shadcn/ui** (Accessible component primitives)
+- **Framer Motion** (Smooth mount/unmount animations)
+- **Lucide React** (Clean, consistent iconography)
+- **Sonner** (Toast notifications)
 
 ---
 
@@ -23,47 +37,51 @@ Quizly is a premium AI study tool that lets users paste notes or upload a PDF/do
 
 - Node.js v18+
 - npm
+- Vercel CLI (for running serverless functions locally)
+- A [Groq API Key](https://console.groq.com/keys)
 
 ### Install & Run
 
+Because Quizly uses Vercel serverless functions for the AI backend, you must run the local development server using the Vercel CLI to bridge the frontend and backend.
+
 ```bash
-# Install dependencies
+# 1. Install dependencies
 npm install
 
-# Start dev server
-npm run dev
+# 2. Link your local project to your Vercel account
+npx vercel link
 
-# Build for production
-npm run build
+# 3. Pull your development environment variables (GROQ_API_KEY)
+npx vercel env pull .env.local
+
+# 4. Start the unified development server
+npx vercel dev
 ```
 
 ---
 
-## 📱 Screens
+## 📱 Architecture & Routing
 
-| Screen           | Description                                       |
-| ---------------- | ------------------------------------------------- |
-| `LandingScreen`  | Hero, input panel, bento feature grid             |
-| `LoadingScreen`  | AI processing state with animated progress stages |
-| `StartScreen`    | Quiz intro — title, question count, start button  |
-| `QuestionScreen` | Active quiz — question, options, timer, progress  |
-| `ResultScreen`   | Score breakdown and review                        |
+Quizly utilizes a secure, protected routing system to ensure users cannot access interactive screens without an active quiz loaded in memory.
 
----
-
-## ✨ Features
-
-- Paste study text or upload a PDF/document
-- AI generates a personalized multiple choice quiz
-- Timed questions with a countdown timer
-- Score tracking and high score persistence
-- Detailed results and review after each quiz
+| Route        | Component        | Description                                                                     |
+| :----------- | :--------------- | :------------------------------------------------------------------------------ |
+| `/`          | `LandingScreen`  | Hero section, file/text input panel, and bento feature grid.                    |
+| _(Internal)_ | `LoadingScreen`  | Interstitial state with animated, real-time AI processing stages.               |
+| `/overview`  | `StartScreen`    | Quiz intro — review parsed sources, select question count, and begin.           |
+| `/quiz`      | `QuestionScreen` | Active quiz — questions, multiple-choice options, and progress tracking.        |
+| `/results`   | `ResultScreen`   | Score breakdown and a custom AI-generated Insight Summary based on performance. |
 
 ---
 
-## 🎨 Design
+## ✨ Key Features
 
-UI designed in **Google Stitch**, converted to React + Tailwind. Dark theme with a custom Material Design 3 color system — deep blacks, violet primary, and soft atmospheric bloom effects.
+- **Multi-Format Input:** Paste raw study text or upload PDF/DOCX files directly.
+- **Smart Context Parsing:** Automatically extracts, chunks, and caps document text (up to 12,000 characters) to optimize AI context windows.
+- **Lightning-Fast Generation:** Utilizes Groq's LPU architecture and the `gpt-oss-20b` model for rapid question generation.
+- **AI Insight Summaries:** At the end of a quiz, the AI analyzes the user's specific answers to generate a personalized review and highlight focus areas.
+- **Bulletproof Routing:** React Router guards prevent app crashes by silently bouncing users back to the home screen if they attempt to bypass the generation flow.
+- **Modern Zinc Aesthetic:** A sleek, dark-themed UI featuring custom background glows, smooth CSS grid animations, perfectly clipped border radiuses, and Lucide icons.
 
 ---
 
