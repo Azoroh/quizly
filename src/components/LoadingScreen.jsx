@@ -117,7 +117,7 @@ export default function LoadingScreen() {
   }, [dispatch, inputText, uploadedFiles, navigate]);
 
   return (
-    <div className="dark bg-background text-on-surface font-body min-h-screen flex flex-col overflow-hidden relative">
+    <div className="dark bg-background text-on-surface font-body h-svh flex flex-col overflow-hidden relative">
       {/* Atmospheric Background */}
       <div className="fixed inset-0 glow-bg pointer-events-none z-0"></div>
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>

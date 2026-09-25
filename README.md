@@ -4,7 +4,7 @@
 
 Quizly is a premium AI study tool that allows users to paste notes or upload documents (PDF/DOCX) to generate a comprehensive, personalized multiple-choice quiz.
 
-🔗 **[Live Preview](https://your-vercel-project-url.vercel.app)** _(Update this with your live Vercel URL)_
+🔗 **[Live Preview](https://jay-quizly.netlify.app)**
 
 ---
 
