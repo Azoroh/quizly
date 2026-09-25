@@ -9,6 +9,16 @@ import { generateQuiz } from "../services/generateQuiz";
 import { buildCappedStudyMaterial } from "../utils/buildCappedStudyMaterial";
 
 export default function LoadingScreen() {
+  useEffect(() => {
+    // Lock background scrolling
+    document.body.style.overflow = "hidden";
+
+    // Unlock when the loading screen goes away
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   const { dispatch, inputText, uploadedFiles, loadingStage, questionCount } =
     useQuiz();
 
@@ -117,7 +127,7 @@ export default function LoadingScreen() {
   }, [dispatch, inputText, uploadedFiles, navigate]);
 
   return (
-    <div className="dark bg-background text-on-surface font-body h-svh flex flex-col overflow-hidden relative">
+    <div className="fixed inset-0 z-50 min-h-[100dvh] w-full flex flex-col overflow-hidden dark bg-background text-on-surface font-body">
       {/* Atmospheric Background */}
       <div className="fixed inset-0 glow-bg pointer-events-none z-0"></div>
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>

@@ -26,7 +26,7 @@ const Toaster = ({ ...props }) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-zinc-900 group-[.toaster]:text-zinc-100 group-[.toaster]:border-zinc-800 group-[.toaster]:shadow-2xl group-[.toaster]:rounded-xl font-sans group-[.toaster]:pr-12 group-[.toaster]:justify-start text-left [&>svg]:!mr-3 [&>svg]:!inline-block",
+            "group toast group-[.toaster]:bg-zinc-900 group-[.toaster]:text-zinc-100 group-[.toaster]:border-zinc-800 group-[.toaster]:shadow-2xl group-[.toaster]:rounded-xl font-sans group-[.toaster]:pr-12 group-[.toaster]:justify-start text-left [&>svg]:!mr-3 [&>svg]:!inline-block !w-[calc(100vw-4rem)] !ml-4 sm:!ml-0 sm:!w-[356px]",
           title: "text-left font-semibold",
           description: "group-[.toaster]:text-zinc-400 text-xs text-left",
           closeButton:
