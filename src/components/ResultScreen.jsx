@@ -1,28 +1,31 @@
-// import ResultHeader from "./result/ResultHeader";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 import ScoreDisplay from "./result/ScoreDisplay";
 import SummaryStats from "./result/SummaryStats";
 import AISummaryPanel from "./result/AISummaryPanel";
 import ResultActions from "./result/ResultActions";
 import { formatTime } from "../utils/formatTime";
-import StartHeader from "./start/StartHeader";
-import { useEffect } from "react";
-
+import { useQuiz } from "@/context/QuizContext";
 import generateReview from "../services/generateReview";
 
-export default function ResultScreen({
-  points,
-  maxPossiblePoints,
-  highScore,
-  correctAnswers,
-  accuracyPercent,
-  quizSeconds,
-  dispatch,
+export default function ResultScreen() {
+  const navigate = useNavigate();
+  const {
+    points,
+    maxPossiblePoints,
+    highScore,
+    correctAnswers,
+    accuracyPercent,
+    quizSeconds,
+    dispatch,
+    reviewPayload,
+    aiSummaryStatus,
+    aiSummary,
+    focusAreas,
+  } = useQuiz();
 
-  reviewPayload,
-  aiSummaryStatus,
-  aiSummary,
-  focusAreas,
-}) {
   useEffect(() => {
     async function fetchSummary() {
       try {
@@ -39,53 +42,59 @@ export default function ResultScreen({
           type: "errorSummary",
           payload: err.message || "Failed to generate AI Summary",
         });
+
+        toast.error("AI Insight Failed", {
+          description:
+            "We couldn't generate your review this time. Our servers might be busy.",
+        });
       }
-      // } finally {
-      //   dispatch({ type: "idleSummary" });
-      // }
     }
 
     fetchSummary();
-    // if (reviewPayload === 0 && aiSummaryStatus === "idle") {
-    //   dispatch({ type: "errorSummary" });
-    // }
   }, [dispatch, reviewPayload, aiSummaryStatus]);
 
   return (
-    <div className="dark bg-surface font-body text-on-surface selection:bg-primary/30 min-h-screen flex flex-col">
-      {/* Atmospheric Background */}
-      <div className="fixed inset-0 glow-bg pointer-events-none z-0"></div>
-      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-start overflow-x-hidden relative px-4 sm:px-6 pt-20 sm:pt-28 pb-12">
+      {/* Subtle background glows */}
+      <div
+        aria-hidden="true"
+        className="fixed top-[-15%] left-[-10%] w-[45%] h-[45%] bg-violet-600/5 blur-[140px] rounded-full pointer-events-none"
+      />
+      <div
+        aria-hidden="true"
+        className="fixed bottom-[-15%] right-[-10%] w-[45%] h-[45%] bg-indigo-600/5 blur-[140px] rounded-full pointer-events-none"
+      />
 
-      {/*  <ResultHeader /> */}
-      <StartHeader />
+      <main className="w-full max-w-3xl flex-grow flex items-start sm:items-center justify-center relative z-10 pb-10">
+        <div className="w-full bg-zinc-900 border border-zinc-800 shadow-2xl shadow-black/60 rounded-2xl p-6 sm:p-8 md:p-12 flex flex-col items-center">
+          <ScoreDisplay
+            points={points}
+            maxPossiblePoints={maxPossiblePoints}
+            highScore={highScore}
+          />
 
-      <main className="flex-grow flex items-start sm:items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-10">
-        <div className="w-full max-w-3xl">
-          <div className="glass-card rounded-[1.75rem] sm:rounded-2xl p-4 sm:p-8 md:p-12 flex flex-col items-center shadow-[0_40px_100px_rgba(0,0,0,0.6)]">
-            <ScoreDisplay
-              points={points}
-              maxPossiblePoints={maxPossiblePoints}
-              highScore={highScore}
-            />
-            <SummaryStats
-              correctAnswers={correctAnswers}
-              accuracyPercent={accuracyPercent}
-              time={`${formatTime(quizSeconds)} ${quizSeconds < 60 ? "sec" : "min"}`}
-            />
+          <SummaryStats
+            correctAnswers={correctAnswers}
+            accuracyPercent={accuracyPercent}
+            time={`${formatTime(quizSeconds || 0)} ${(quizSeconds || 0) < 60 ? "sec" : "min"}`}
+          />
 
-            <AISummaryPanel
-              aiSummaryStatus={aiSummaryStatus}
-              aiSummary={aiSummary}
-              focusAreas={focusAreas}
-            />
+          <AISummaryPanel
+            aiSummaryStatus={aiSummaryStatus}
+            aiSummary={aiSummary}
+            focusAreas={focusAreas}
+          />
 
-            <ResultActions
-              onRestart={() => dispatch({ type: "restart" })}
-              onNewQuiz={() => dispatch({ type: "newQuiz" })}
-            />
-          </div>
+          <ResultActions
+            onRestart={() => {
+              navigate("/overview");
+              dispatch({ type: "restart" });
+            }}
+            onNewQuiz={() => {
+              navigate("/");
+              dispatch({ type: "newQuiz" });
+            }}
+          />
         </div>
       </main>
     </div>

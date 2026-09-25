@@ -1,17 +1,19 @@
 import { useEffect } from "react";
-import LoadingHeader from "./loading/LoadingHeader";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useQuiz } from "../context/QuizContext";
+
 import LoadingCard from "./loading/LoadingCard";
 import { extractFileText } from "../services/extractFileText";
 import { generateQuiz } from "../services/generateQuiz";
 import { buildCappedStudyMaterial } from "../utils/buildCappedStudyMaterial";
 
-export default function LoadingScreen({
-  dispatch,
-  inputText,
-  uploadedFiles,
-  loadingStage,
-  questionCount,
-}) {
+export default function LoadingScreen() {
+  const { dispatch, inputText, uploadedFiles, loadingStage, questionCount } =
+    useQuiz();
+
+  const navigate = useNavigate();
+
   const MAX_INPUT_CHARS = 12000;
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export default function LoadingScreen({
 
       try {
         let safeText;
+        let sources = [];
 
         try {
           const extractedFiles = await Promise.all(
@@ -39,20 +42,15 @@ export default function LoadingScreen({
           });
 
           safeText = cappedMaterial.combinedText;
+          sources = cappedMaterial.sources || [];
 
           dispatch({
             type: "sourceUsage",
             payload: cappedMaterial.sources,
           });
-
-          console.log(cappedMaterial);
-          console.log(
-            cappedMaterial.sources.filter((source) => source.wasIncluded),
-          );
         } catch (error) {
           if (cancelled) return;
           console.error("File extraction failed:", error);
-
           dispatch({
             type: "error",
             payload:
@@ -75,7 +73,6 @@ export default function LoadingScreen({
         const quiz = await generateQuiz(safeText);
 
         if (cancelled) return;
-
         dispatch({ type: "finalizingStage" });
 
         await wait(500);
@@ -86,7 +83,22 @@ export default function LoadingScreen({
         await wait(350);
 
         if (cancelled) return;
+
         dispatch({ type: "ready", payload: quiz });
+
+        const includedSources = sources.filter((s) => s.wasIncluded);
+        const sourceCount =
+          includedSources.length > 0 ? includedSources.length : sources.length;
+        const description =
+          sourceCount > 0
+            ? `Parsed ${sourceCount} source${sourceCount > 1 ? "s" : ""} and built your custom quiz.`
+            : "Parsed sources and built your custom quiz.";
+
+        toast.success("Quiz Generated Successfully!", {
+          description,
+        });
+
+        navigate("/overview");
       } catch (err) {
         if (cancelled) return;
 
@@ -102,7 +114,7 @@ export default function LoadingScreen({
     return () => {
       cancelled = true;
     };
-  }, [dispatch, inputText, uploadedFiles]);
+  }, [dispatch, inputText, uploadedFiles, navigate]);
 
   return (
     <div className="dark bg-background text-on-surface font-body h-svh flex flex-col overflow-hidden relative">
@@ -111,9 +123,7 @@ export default function LoadingScreen({
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
 
-      <LoadingHeader />
-
-      <main className="flex-grow flex items-center justify-center px-4 sm:px-6 pt-16 pb-10 relative z-10">
+      <main className="flex-grow flex items-start sm:items-center justify-center px-4 sm:px-6 pt-24 sm:pt-28 pb-10 relative z-10">
         <LoadingCard
           uploadedFiles={uploadedFiles}
           loadingStage={loadingStage}

@@ -26,4 +26,10 @@ dist-ssr
 .env
 .env.local
 .env.*
-!.env.example
+
+
+_legacy_src/
+src/data/
+
+.vercel
+.env*

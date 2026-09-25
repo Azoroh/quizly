@@ -1,73 +1,39 @@
-import { getProgressPercent } from "../utils/getProgressPercent";
-
 import QuestionCard from "./question/QuestionCard";
 import QuestionHeader from "./question/QuestionHeader";
 import QuestionFooter from "./question/QuestionFooter";
 import OptionsList from "./question/OptionsList";
-import StartHeader from "./start/StartHeader";
+import { useQuiz } from "@/context/QuizContext";
 
-export default function QuestionScreen({
-  dispatch,
-  curQuestion,
-  answer,
-  index,
-  questions,
-  remainingSeconds,
-}) {
-  // const [selected, setSelected] = useState(null);
-
-  // console.log(curQuestion);
+export default function QuestionScreen() {
+  const { curQuestion } = useQuiz();
 
   return (
-    <div className="dark bg-background text-on-surface h-svh flex flex-col overflow-hidden">
-      {/* Atmospheric Background */}
-      <div className="fixed inset-0 glow-bg pointer-events-none z-0"></div>
-      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
+    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center overflow-x-hidden relative px-4 sm:px-6 pt-20 sm:pt-28 pb-12">
+      {/* Subtle background atmospheric glows */}
+      <div
+        aria-hidden="true"
+        className="fixed top-[-15%] left-[-10%] w-[45%] h-[45%] bg-violet-600/5 blur-[140px] rounded-full pointer-events-none"
+      />
+      <div
+        aria-hidden="true"
+        className="fixed bottom-[-15%] right-[-10%] w-[45%] h-[45%] bg-indigo-600/5 blur-[140px] rounded-full pointer-events-none"
+      />
 
-      {/* Nav */}
-      {/* <StartHeader /> */}
+      <main className="w-full flex items-center justify-center relative z-10">
+        <QuestionCard>
+          <QuestionHeader />
 
-      <main className="flex-grow flex items-center justify-center px-3 sm:px-6 pt-4 pb-4">
-        <div className="w-full max-w-3xl">
-          <QuestionCard answer={answer}>
-            <QuestionHeader
-              dispatch={dispatch}
-              remainingSeconds={remainingSeconds}
-              current={index + 1}
-              total={questions.length}
-              progress={getProgressPercent(index, answer, questions.length)}
-            />
+          {/* Active Question Text */}
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-zinc-100 leading-snug">
+              {curQuestion?.question}
+            </h1>
+          </div>
 
-            {/* Question Text */}
-            <div className="mb-6 sm:mb-12">
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-headline font-bold leading-tight tracking-tight text-on-surface">
-                {curQuestion?.question}
-              </h1>
-            </div>
+          <OptionsList />
 
-            <OptionsList
-              answer={answer}
-              dispatch={dispatch}
-              options={curQuestion?.options}
-              correctOption={curQuestion?.correctOption}
-            />
-
-            <QuestionFooter
-              answer={answer}
-              onClick={
-                index !== questions.length - 1
-                  ? () => dispatch({ type: "nextQuestion" })
-                  : () => dispatch({ type: "finish" })
-              }
-              buttonText={
-                index !== questions.length - 1
-                  ? "Next Question"
-                  : "Final Question"
-              }
-            />
-          </QuestionCard>
-        </div>
+          <QuestionFooter />
+        </QuestionCard>
       </main>
     </div>
   );

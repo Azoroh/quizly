@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import Groq from "groq-sdk";
+import fs from "fs";
 
 dotenv.config();
 
@@ -12,24 +13,24 @@ app.use(cors());
 app.use(express.json());
 
 const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY,
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 // !Quiz generation
 app.post("/api/generate-quiz", async (req, res) => {
-    try {
-        const { inputText, questionCount = 15 } = req.body;
+  try {
+    const { inputText, questionCount = 15 } = req.body;
 
-        if (!inputText || !inputText.trim()) {
-            return res.status(400).json({ error: "No input text provided" });
-        }
+    if (!inputText || !inputText.trim()) {
+      return res.status(400).json({ error: "No input text provided" });
+    }
 
-        const safeQuestionCount = Math.min(
-            Math.max(Number(questionCount) || 15, 1),
-            40
-        );
+    const safeQuestionCount = Math.min(
+      Math.max(Number(questionCount) || 15, 1),
+      40,
+    );
 
-        const prompt = `
+    const prompt = `
         You are generating quiz questions from study material.
         Return ONLY valid JSON.
         Do not wrap the response in markdown blocks like \`\`\`json.
@@ -59,101 +60,109 @@ app.post("/api/generate-quiz", async (req, res) => {
         ${inputText}
         `;
 
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "system",
-                    content: "You are a specialized JSON-only quiz generator."
-                },
-                {
-                    role: "user",
-                    content: prompt,
-                },
-            ],
-            model: "llama-3.1-8b-instant",
-            response_format: { type: "json_object" },
-            temperature: 0.7,
-        });
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a specialized JSON-only quiz generator.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      // model: "llama-3.1-8b-instant",
+      // model: "llama3-8b-8192",
+      // model: "mixtral-8x7b-32768",
+      model: "openai/gpt-oss-20b",
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+    });
 
-        const rawText = chatCompletion.choices[0].message.content.trim();
+    const rawText = chatCompletion.choices[0].message.content.trim();
 
-        let parsed;
-        try {
-            parsed = JSON.parse(rawText);
-        } catch {
-            return res.status(500).json({
-                error: "Model returned invalid JSON",
-                raw: rawText,
-            });
-        }
-
-        const cleanedQuestions = (parsed.questions || []).filter((q) => {
-            return (
-                q &&
-                typeof q.question === "string" &&
-                Array.isArray(q.options) &&
-                q.options.length === 4 &&
-                Number.isInteger(q.correctOption) &&
-                q.correctOption >= 0 &&
-                q.correctOption <= 3 &&
-                typeof q.explanation === "string"
-            );
-        });
-
-        if (cleanedQuestions.length === 0) {
-            return res.status(500).json({
-                error: "No valid questions were generated",
-            });
-        }
-
-        return res.status(200).json({
-            questions: cleanedQuestions,
-        });
-    } catch (error) {
-        console.error("Quizly Generation Error:", error);
-
-        const status = error?.status || 500;
-        const providerMessage = error?.error?.message || error?.error?.message;
-
-
-        if (status === 429) {
-            return res.status(429).json({
-                error: providerMessage || "AI is temporarily rate limited. Please try again in a few seconds."
-            })
-        }
-
-        if (status === 413) {
-            return res.status(413).json({
-                error:
-                    "Your uploaded material is too large to process at once. Try fewer files, shorter notes, or split the content into smaller parts.",
-            });
-        }
-
-        return res.status(status).json({ error: providerMessage || "Failed to generate quiz" });
+    let parsed;
+    try {
+      parsed = JSON.parse(rawText);
+    } catch {
+      return res.status(500).json({
+        error: "Model returned invalid JSON",
+        raw: rawText,
+      });
     }
-});
 
+    const cleanedQuestions = (parsed.questions || []).filter((q) => {
+      return (
+        q &&
+        typeof q.question === "string" &&
+        Array.isArray(q.options) &&
+        q.options.length === 4 &&
+        Number.isInteger(q.correctOption) &&
+        q.correctOption >= 0 &&
+        q.correctOption <= 3 &&
+        typeof q.explanation === "string"
+      );
+    });
+
+    if (cleanedQuestions.length === 0) {
+      return res.status(500).json({
+        error: "No valid questions were generated",
+      });
+    }
+
+    return res.status(200).json({
+      questions: cleanedQuestions,
+    });
+  } catch (error) {
+    console.error("Quizly Generation Error:", error);
+
+    const status = error?.status || 500;
+    const providerMessage = error?.error?.message || error?.error?.message;
+
+    if (status === 429) {
+      return res.status(429).json({
+        error:
+          providerMessage ||
+          "AI is temporarily rate limited. Please try again in a few seconds.",
+      });
+    }
+
+    if (status === 413) {
+      return res.status(413).json({
+        error:
+          "Your uploaded material is too large to process at once. Try fewer files, shorter notes, or split the content into smaller parts.",
+      });
+    }
+
+    return res.status(status).json({
+      error: providerMessage || "Failed to generate quiz",
+      debugMessage: error?.message,
+      debugName: error?.name,
+      debugStatus: error?.status,
+    });
+  }
+});
 
 // !Summary generation
 app.post("/api/generate-review", async (req, res) => {
-    try {
+  try {
+    const { reviewPayload } = req.body;
 
-        const { reviewPayload } = req.body
+    if (!Array.isArray(reviewPayload) || reviewPayload.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "A non-empty reviewPayload array is required" });
+    }
 
-        if (!Array.isArray(reviewPayload) || reviewPayload.length === 0) {
-            return res.status(400).json({ error: "A non-empty reviewPayload array is required" })
-        }
+    const simplifiedPayload = reviewPayload.map((item) => ({
+      question: item.question,
+      selectedOption: item.selectedOption,
+      correctOption: item.correctOption,
+      isCorrect: item.isCorrect,
+      explanation: item.explanation,
+    }));
 
-        const simplifiedPayload = reviewPayload.map(item => ({
-            question: item.question,
-            selectedOption: item.selectedOption,
-            correctOption: item.correctOption,
-            isCorrect: item.isCorrect,
-            explanation: item.explanation
-        }))
-
-
-        const prompt = `
+    const prompt = `
 You are an AI tutor reviewing a student's quiz performance.
 
 Return ONLY valid JSON in this format:
@@ -174,54 +183,54 @@ Instructions:
 - Do not add extra keys.
 `;
 
-        const chatCompletion = await groq.chat.completions.create({
-            messages: [
-                {
-                    role: "system",
-                    content: "You are a precise AI tutor that returns only valid JSON."
-                },
-                {
-                    role: "user",
-                    content: prompt,
-                },
-            ],
-            model: "llama-3.1-8b-instant",
-            response_format: { type: "json_object" },
-            temperature: 0.7,
-        });
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "system",
+          content: "You are a precise AI tutor that returns only valid JSON.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      model: "llama-3.1-8b-instant",
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+    });
 
-        const rawText = chatCompletion.choices[0].message.content.trim();
+    const rawText = chatCompletion.choices[0].message.content.trim();
 
-        let parsed;
-        try {
-            parsed = JSON.parse(rawText)
-        } catch {
-            return res.status(500).json({
-                error: 'Model returned invalid JSON',
-                raw: rawText
-            })
-        }
-
-
-        const summary = typeof parsed.summary === 'string' ? parsed.summary.trim() : "";
-
-        const focusAreas = Array.isArray(parsed.focusAreas) ? parsed.focusAreas.filter(item => typeof item === 'string').slice(0, 3) : []
-
-        if (!summary || focusAreas.length === 0) {
-            return res.status(500).json({
-                error: "Model returned an invalid review structure",
-            });
-        }
-
-        return res.status(200).json({ summary, focusAreas })
-
-    } catch (error) {
-        console.error("Quizly Summary Generation Error:", error);
-        return res.status(500).json({ error: "Failed to generate review" });
+    let parsed;
+    try {
+      parsed = JSON.parse(rawText);
+    } catch {
+      return res.status(500).json({
+        error: "Model returned invalid JSON",
+        raw: rawText,
+      });
     }
-})
 
+    const summary =
+      typeof parsed.summary === "string" ? parsed.summary.trim() : "";
+
+    const focusAreas = Array.isArray(parsed.focusAreas)
+      ? parsed.focusAreas.filter((item) => typeof item === "string").slice(0, 3)
+      : [];
+
+    if (!summary || focusAreas.length === 0) {
+      return res.status(500).json({
+        error: "Model returned an invalid review structure",
+      });
+    }
+
+    return res.status(200).json({ summary, focusAreas });
+  } catch (error) {
+    console.error("Quizly Summary Generation Error:", error);
+    return res.status(500).json({ error: "Failed to generate review" });
+  }
+});
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

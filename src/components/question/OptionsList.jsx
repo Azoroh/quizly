@@ -1,60 +1,53 @@
+import { useQuiz } from "@/context/QuizContext";
+import { Check, X } from "lucide-react";
+
 const letters = ["A", "B", "C", "D"];
 
-export default function OptionsList({
-  answer,
-  dispatch,
-  options,
-  correctOption,
-}) {
-  // console.log(correctOption);
+export default function OptionsList() {
+  const {
+    answer,
+    dispatch,
+    curQuestion: { options = [], correctOption } = {},
+  } = useQuiz();
 
   const hasSelected = answer !== null;
 
-  function getStyles(i) {
-    if (!hasSelected) {
-      return {
-        button:
-          "bg-surface-container-low border-outline-variant/10 hover:bg-surface-bright hover:border-outline-variant/30",
-        badge:
-          "bg-surface-container-highest text-on-surface-variant group-hover:text-on-surface",
-        text: "text-on-surface-variant group-hover:text-on-surface",
-        icon: null,
-      };
-    }
-
-    // correct answer always shows green after selection
-    if (i === correctOption) {
-      return {
-        button: "bg-green-500/10 border-green-500/30 ring-1 ring-green-500/20",
-        badge: "bg-green-500 text-white shadow-[0_0_15px_rgba(34,197,94,0.3)]",
-        text: "text-green-400",
-        icon: "check_circle",
-      };
-    }
-
-    // the wrong option the user picked
-    if (i === answer) {
-      return {
-        button: "bg-red-500/10 border-red-500/30 ring-1 ring-red-500/20",
-        badge: "bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.3)]",
-        text: "text-red-400",
-        icon: "cancel",
-      };
-    }
-
-    // all other unselected options dim out
-    return {
-      button: "bg-surface-container-low border-outline-variant/10 opacity-40",
-      badge: "bg-surface-container-highest text-on-surface-variant",
-      text: "text-on-surface-variant",
-      icon: null,
-    };
-  }
-
   return (
-    <div className="grid grid-cols-1 gap-3 sm:gap-4 mb-8 sm:mb-12">
+    <div className="grid grid-cols-1 gap-3 mb-6 sm:mb-8">
       {options?.map((option, i) => {
-        const styles = getStyles(i);
+        const isSelected = answer === i;
+        const isCorrect = correctOption === i;
+
+        let stateClasses =
+          "bg-zinc-800/40 border-zinc-700/60 text-zinc-200 hover:bg-zinc-800 hover:border-zinc-600 cursor-pointer";
+        let badgeClasses =
+          "bg-zinc-800 border border-zinc-700 text-zinc-400 group-hover:text-zinc-100 group-hover:border-zinc-500";
+        let Icon = null;
+
+        if (hasSelected) {
+          if (isCorrect) {
+            // correct answer highlighted green
+            stateClasses =
+              "bg-emerald-600/15 border-emerald-500 text-emerald-200 font-semibold shadow-sm ring-1 ring-emerald-500/40";
+            badgeClasses =
+              "bg-emerald-600 text-white font-bold shadow-sm border-emerald-500";
+            Icon = <Check className="w-4 h-4 text-emerald-300 ml-3 shrink-0" />;
+          } else if (isSelected && !isCorrect) {
+            // wrong answer highlighted red
+            stateClasses =
+              "bg-rose-600/15 border-rose-500 text-rose-200 font-semibold shadow-sm ring-1 ring-rose-500/40";
+            badgeClasses =
+              "bg-rose-600 text-white font-bold shadow-sm border-rose-500";
+            Icon = <X className="w-4 h-4 text-rose-300 ml-3 shrink-0" />;
+          } else {
+            // Unselected wrong answers fade
+            stateClasses =
+              "bg-zinc-800/20 border-zinc-800/50 text-zinc-400 opacity-40 cursor-not-allowed";
+            badgeClasses =
+              "bg-zinc-800/40 border border-zinc-800 text-zinc-600";
+          }
+        }
+
         return (
           <button
             key={i}
@@ -62,68 +55,22 @@ export default function OptionsList({
               !hasSelected && dispatch({ type: "selectAnswer", payload: i });
             }}
             disabled={hasSelected}
-            className={`group flex items-center text-left p-4 sm:p-6 rounded-2xl transition-all duration-300 border ${styles.button}`}
+            className={`group flex items-center text-left p-4 sm:p-5 rounded-xl border transition-all duration-200 ease-in-out w-full ${stateClasses}`}
           >
             <div
-              className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl font-headline font-bold text-sm sm:text-base mr-3 sm:mr-4 transition-colors flex-shrink-0 ${styles.badge}`}
+              className={`flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg font-semibold text-xs sm:text-sm mr-3 sm:mr-4 transition-colors shrink-0 ${badgeClasses}`}
             >
               {letters[i]}
             </div>
-            <span
-              className={`text-sm sm:text-base font-body font-medium transition-colors flex-1 ${styles.text}`}
-            >
+
+            <span className="text-sm sm:text-base font-medium transition-colors flex-1 leading-relaxed">
               {option}
             </span>
-            {styles.icon && (
-              <span
-                className={`material-symbols-outlined ml-4 ${i === correctOption ? "text-green-500" : "text-red-500"}`}
-              >
-                {styles.icon}
-              </span>
-            )}
+
+            {Icon}
           </button>
         );
       })}
     </div>
   );
-
-  // return (
-  //   <div className="grid grid-cols-1 gap-4 mb-12">
-  //     {options.map((option, i) => {
-  //       const isSelected = answer === i;
-
-  //       return (
-  //         <button
-  //           key={i}
-  //           onClick={() => dispatch({ type: "selectAnswer", payload: i })}
-  //           className={`group flex items-center text-left p-6 rounded-2xl transition-all duration-300 border ${
-  //             isSelected
-  //               ? "bg-primary/10 border-primary/40"
-  //               : "bg-surface-container-low border-outline-variant/10 hover:bg-surface-bright hover:border-outline-variant/30"
-  //           }`}
-  //         >
-  //           <div
-  //             className={`flex items-center justify-center w-12 h-12 rounded-xl font-headline font-bold text-lg mr-6 transition-colors ${
-  //               isSelected
-  //                 ? "bg-primary text-on-primary"
-  //                 : "bg-surface-container-highest text-on-surface-variant group-hover:text-on-surface"
-  //             }`}
-  //           >
-  //             {letters[i]}
-  //           </div>
-
-  //           <span
-  //             className={`text-lg font-body font-medium transition-colors ${
-  //               isSelected
-  //                 ? "text-on-surface"
-  //                 : "text-on-surface-variant group-hover:text-on-surface"
-  //             }`}
-  //           >
-  //             {option}
-  //           </span>
-  //         </button>
-  //       );
-  //     })}
-  //   </div>
-  // );
 }
