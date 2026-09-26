@@ -133,7 +133,8 @@ export default function LoadingScreen() {
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
 
-      <main className="flex-grow flex items-start sm:items-center justify-center px-4 sm:px-6 pt-24 sm:pt-28 pb-10 relative z-10">
+      {/* <main className="flex-grow flex items-start sm:items-center justify-center px-4 sm:px-6 pt-24 sm:pt-28 pb-10 relative z-10">*/}
+      <main className="flex-1 flex items-center justify-center w-full p-4 sm:p-6 relative z-10">
         <LoadingCard
           uploadedFiles={uploadedFiles}
           loadingStage={loadingStage}
