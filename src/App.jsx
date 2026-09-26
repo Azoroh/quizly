@@ -8,6 +8,7 @@ import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
 import ErrorScreen from "./components/ErrorMessage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import AuthPage from "./components/AuthPage.jsx";
 
 export default function App() {
   return (
@@ -17,6 +18,8 @@ export default function App() {
           <Routes>
             {/* The Landing Route (also renders the Loading screen while status === "loading") */}
             <Route path="/" element={<LandingScreen />} />
+
+            <Route path="/auth" element={<AuthPage />} />
 
             {/* Protected Routes Wrapper */}
             <Route element={<ProtectedRoute />}>
