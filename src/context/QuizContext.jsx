@@ -285,15 +285,13 @@ export function QuizProvider({ children }) {
         {
           user_id: user.id,
           title: quizTitle || "My Custom Quiz",
-          question: generatedQuestions,
+          questions: generatedQuestions,
         },
       ]);
 
       if (error) throw error;
 
-      toast.success("QUiz backed up to your account", {
-        description: "You can find it in your profile history.",
-      });
+      toast.success("Quiz backed up to your account. ");
     } catch (error) {
       console.error("Database error:", error.message);
       toast.error("Failed to save quiz to your history");
