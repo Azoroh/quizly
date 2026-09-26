@@ -1,4 +1,8 @@
 import { createContext, useContext, useReducer } from "react";
+import { supabase } from "@/supabaseClient.js";
+import { useAuth } from "./AuthContext.jsx";
+import { toast } from "sonner";
+
 import { getRandomItems } from "../utils/getRandomItems.js";
 import { useLocalStorage } from "../hooks/useLocalStorage.js";
 
@@ -268,9 +272,33 @@ function reducer(state, action) {
 }
 
 export function QuizProvider({ children }) {
+  const { user } = useAuth();
   const [state, dispatch] = useReducer(reducer, initialState, init);
 
   useLocalStorage("highscore", state.highScore);
+
+  async function saveQuizToDatabase(quizTitle, generatedQuestions) {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase.from("quizzes").insert([
+        {
+          user_id: user.id,
+          title: quizTitle || "My Custom Quiz",
+          question: generatedQuestions,
+        },
+      ]);
+
+      if (error) throw error;
+
+      toast.success("QUiz backed up to your account", {
+        description: "You can find it in your profile history.",
+      });
+    } catch (error) {
+      console.error("Database error:", error.message);
+      toast.error("Failed to save quiz to your history");
+    }
+  }
 
   const curQuestion = state.questions[state.index];
   const maxPossiblePoints = state.questions.length * POINTS_PER_QUESTION;
@@ -287,6 +315,7 @@ export function QuizProvider({ children }) {
         correctAnswers,
         accuracyPercent,
         curQuestion,
+        saveQuizToDatabase,
       }}
     >
       {children}

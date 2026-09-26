@@ -19,8 +19,14 @@ export default function LoadingScreen() {
     };
   }, []);
 
-  const { dispatch, inputText, uploadedFiles, loadingStage, questionCount } =
-    useQuiz();
+  const {
+    dispatch,
+    inputText,
+    uploadedFiles,
+    loadingStage,
+    questionCount,
+    saveQuizToDatabase,
+  } = useQuiz();
 
   const navigate = useNavigate();
 
@@ -95,6 +101,13 @@ export default function LoadingScreen() {
         if (cancelled) return;
 
         dispatch({ type: "ready", payload: quiz });
+
+        //lets create a title based on what user uploaded and then save to our database
+        const quizTitle =
+          uploadedFiles.length > 0 ? uploadedFiles[0].name : "Custom Text Quiz";
+
+        //we dont need to await this, we just let it run in the background so it doesnt delay our navigation
+        saveQuizToDatabase(quizTitle, quiz);
 
         const includedSources = sources.filter((s) => s.wasIncluded);
         const sourceCount =
