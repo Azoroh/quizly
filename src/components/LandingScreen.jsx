@@ -29,7 +29,7 @@ export default function LandingScreen() {
         </div>
       )}
 
-      <Navbar />
+      {status !== "loading" && <Navbar />}
 
       <main className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-14 sm:pb-20">
         <div
