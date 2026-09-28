@@ -1,5 +1,4 @@
 import { useQuiz } from "@/context/QuizContext";
-import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -12,8 +11,9 @@ export default function QuestionFooter() {
     index !== questions.length - 1 ? "Next Question" : "Finish Quiz";
 
   return (
-    <div className="flex items-center justify-stretch sm:justify-end pt-5 sm:pt-6 border-t border-zinc-800/80">
-      <Button
+    <div className="flex items-center justify-end pt-4 border-t border-zinc-900">
+      <button
+        type="button"
         disabled={!hasSelected}
         onClick={
           index !== questions.length - 1
@@ -23,15 +23,15 @@ export default function QuestionFooter() {
                 navigate("/results");
               }
         }
-        className={`w-full sm:w-auto h-12 px-6 sm:px-8 rounded-xl font-semibold text-sm sm:text-base gap-2 transition-all duration-200 ${
+        className={`w-full sm:w-auto h-9 px-4 rounded-md text-xs font-medium flex items-center justify-center gap-2 transition-all shadow-sm ${
           hasSelected
-            ? "bg-violet-600 hover:bg-violet-500 text-white shadow-lg shadow-violet-600/25 active:scale-[0.98]"
-            : "bg-zinc-800/80 border border-zinc-700/60 text-zinc-500 cursor-not-allowed opacity-50"
+            ? "bg-zinc-100 text-zinc-900 hover:bg-white"
+            : "bg-zinc-900 border border-zinc-800 text-zinc-600 cursor-not-allowed"
         }`}
       >
         <span>{buttonText}</span>
-        <ArrowRight className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
-      </Button>
+        <ArrowRight className="w-3.5 h-3.5 shrink-0 opacity-70" />
+      </button>
     </div>
   );
 }
