@@ -7,7 +7,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build output
 dist
 dist-ssr
 *.local
@@ -23,13 +26,22 @@ dist-ssr
 *.sln
 *.sw?
 
+# Env files
 .env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env.*
 
+# Vercel
+.vercel
 
+# Caches & Tools
+.eslintcache
+.vite/
+coverage/
+
+# Project specific
 _legacy_src/
 src/data/
-
-.vercel
-.env*
