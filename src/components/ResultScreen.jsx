@@ -8,10 +8,12 @@ import AISummaryPanel from "./result/AISummaryPanel";
 import ResultActions from "./result/ResultActions";
 import { formatTime } from "../utils/formatTime";
 import { useQuiz } from "@/context/QuizContext";
+import { useAuth } from "../context/AuthContext";
 import generateReview from "../services/generateReview";
 
 export default function ResultScreen() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const {
     points,
     maxPossiblePoints,
@@ -24,6 +26,7 @@ export default function ResultScreen() {
     aiSummaryStatus,
     aiSummary,
     focusAreas,
+    isRerun, // 1. Extract isRerun flag
   } = useQuiz();
 
   useEffect(() => {
@@ -82,6 +85,22 @@ export default function ResultScreen() {
               dispatch({ type: "newQuiz" });
             }}
           />
+
+          {/* 2. Dynamic Library Link for Authenticated Users */}
+          {user && (
+            <div className="mt-6 border-t border-zinc-900/50 w-full pt-4 flex justify-center">
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="text-xs font-medium text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1.5"
+              >
+                {isRerun ? (
+                  <>&larr; Back to Library</>
+                ) : (
+                  <>View in Library &rarr;</>
+                )}
+              </button>
+            </div>
+          )}
         </div>
       </main>
     </div>
