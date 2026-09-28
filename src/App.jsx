@@ -7,7 +7,7 @@ import LandingScreen from "./components/LandingScreen";
 import StartScreen from "./components/StartScreen";
 import QuestionScreen from "./components/QuestionScreen";
 import ResultScreen from "./components/ResultScreen";
-import ErrorScreen from "./components/ErrorMessage.jsx";
+import NotFoundScreen from "./components/NotFoundScreen.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx"; //checking for active quiz
 import RequireAuth from "./components/RequireAuth.jsx"; // checking for logged-in user
 import AuthPage from "./components/AuthPage.jsx";
@@ -40,7 +40,7 @@ export default function App() {
               </Route>
 
               {/* Catch-all */}
-              <Route path="*" element={<ErrorScreen />} />
+              <Route path="*" element={<NotFoundScreen />} />
             </Routes>
 
             <Toaster
