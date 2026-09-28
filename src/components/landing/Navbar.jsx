@@ -42,7 +42,7 @@ export default function Navbar() {
             How it Works
           </Link>
           <Link
-            className="text-xs font-medium text-zinc-500 hover:text-zinc-100 transition-colors"
+            className="text-xs font-medium text-zinc-500 hover:text-zinc-100 transition-colors pointer-events-none cursor-default opacity-60"
             to="/pricing"
           >
             Pricing
