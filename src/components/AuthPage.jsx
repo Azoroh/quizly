@@ -42,7 +42,7 @@ export default function AuthPage() {
 
         if (error) throw error;
         toast.success("Welcome back!");
-        navigate("/overview"); // direct them to the startscreen on success
+        navigate("/profile"); // direct them to the startscreen on success
       }
     } catch (error) {
       toast.error(error.message || "An error occured during authentication.");

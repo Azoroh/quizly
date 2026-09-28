@@ -139,7 +139,7 @@ export default function ProfileDashboard() {
                   {/* GENERATION BADGE - Only shows if this source has been used more than once */}
                   {quiz.generation > 1 && (
                     <span className="flex-shrink-0 flex items-center gap-1 bg-primary/10 text-primary-400 border border-primary/20 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
-                      <SparklesIcon className="size-3" />
+                      {/* <SparklesIcon className="size-3" />*/}
                       Gen {quiz.generation}
                     </span>
                   )}
