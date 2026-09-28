@@ -31,9 +31,7 @@ export default function ResultScreen() {
       try {
         if (reviewPayload.length > 0 && aiSummaryStatus === "idle") {
           dispatch({ type: "loadSummary" });
-
           const result = await generateReview(reviewPayload);
-
           dispatch({ type: "readySummary", payload: result });
         }
       } catch (err) {
@@ -42,31 +40,20 @@ export default function ResultScreen() {
           type: "errorSummary",
           payload: err.message || "Failed to generate AI Summary",
         });
-
         toast.error("AI Insight Failed", {
-          description:
-            "We couldn't generate your review this time. Our servers might be busy.",
+          description: "We couldn't generate your review this time.",
         });
       }
     }
-
     fetchSummary();
   }, [dispatch, reviewPayload, aiSummaryStatus]);
 
-  return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-start overflow-x-hidden relative px-4 sm:px-6 pt-20 sm:pt-28 pb-12">
-      {/* Subtle background glows */}
-      <div
-        aria-hidden="true"
-        className="fixed top-[-15%] left-[-10%] w-[45%] h-[45%] bg-violet-600/5 blur-[140px] rounded-full pointer-events-none"
-      />
-      <div
-        aria-hidden="true"
-        className="fixed bottom-[-15%] right-[-10%] w-[45%] h-[45%] bg-indigo-600/5 blur-[140px] rounded-full pointer-events-none"
-      />
+  const timeLabel = `${formatTime(quizSeconds || 0)} ${(quizSeconds || 0) < 60 ? "sec" : "min"}`;
 
-      <main className="w-full max-w-3xl flex-grow flex items-start sm:items-center justify-center relative z-10 pb-10">
-        <div className="w-full bg-zinc-900 border border-zinc-800 shadow-2xl shadow-black/60 rounded-2xl p-6 sm:p-8 md:p-12 flex flex-col items-center">
+  return (
+    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col items-center justify-center overflow-x-hidden relative px-4 sm:px-6 py-12">
+      <main className="w-full max-w-xl flex items-center justify-center relative z-10">
+        <div className="w-full bg-[#09090b] border border-zinc-900 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col items-center">
           <ScoreDisplay
             points={points}
             maxPossiblePoints={maxPossiblePoints}
@@ -76,7 +63,7 @@ export default function ResultScreen() {
           <SummaryStats
             correctAnswers={correctAnswers}
             accuracyPercent={accuracyPercent}
-            time={`${formatTime(quizSeconds || 0)} ${(quizSeconds || 0) < 60 ? "sec" : "min"}`}
+            time={timeLabel}
           />
 
           <AISummaryPanel

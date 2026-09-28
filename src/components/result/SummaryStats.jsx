@@ -7,53 +7,36 @@ export default function SummaryStats({
 }) {
   const stats = [
     {
-      icon: (
-        <CheckCircle2
-          className="w-6 h-6 sm:w-7 sm:h-7 text-emerald-500"
-          strokeWidth={1.75}
-        />
-      ),
+      icon: <CheckCircle2 className="w-4 h-4 text-zinc-500" strokeWidth={2} />,
       label: "Correct",
-      value: `${correctAnswers} Answers`,
+      value: `${correctAnswers} Ans`,
     },
     {
-      icon: (
-        <Gauge
-          className="w-6 h-6 sm:w-7 sm:h-7 text-blue-500"
-          strokeWidth={1.75}
-        />
-      ),
+      icon: <Gauge className="w-4 h-4 text-zinc-500" strokeWidth={2} />,
       label: "Accuracy",
-      value: `${Math.round(accuracyPercent)} %`,
+      value: `${Math.round(accuracyPercent)}%`,
     },
     {
-      icon: (
-        <Timer
-          className="w-6 h-6 sm:w-8 sm:h-8 text-violet-500"
-          strokeWidth={1.75}
-        />
-      ),
+      icon: <Timer className="w-4 h-4 text-zinc-500" strokeWidth={2} />,
       label: "Time",
       value: time,
     },
   ];
 
   return (
-    <div className="w-full grid grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-10">
+    <div className="w-full grid grid-cols-3 gap-2 mb-6">
       {stats.map(({ icon, label, value }) => (
         <div
           key={label}
-          className="bg-zinc-800/50 border border-zinc-700/60 px-3 sm:px-5 py-4 sm:py-5 rounded-2xl flex flex-col sm:flex-row items-center justify-center text-center sm:text-left gap-2 sm:gap-4 shadow-sm"
+          className="bg-zinc-950/50 border border-zinc-900 px-3 py-3 rounded-lg flex flex-col items-center text-center gap-1.5"
         >
-          <div className="shrink-0 drop-shadow-sm">{icon}</div>
-          <div>
-            <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1 sm:mb-0.5">
-              {label}
-            </p>
-            <p className="text-sm sm:text-base font-bold text-zinc-100">
-              {value}
-            </p>
-          </div>
+          <div className="shrink-0">{icon}</div>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-600">
+            {label}
+          </span>
+          <span className="text-xs sm:text-sm font-medium text-zinc-200">
+            {value}
+          </span>
         </div>
       ))}
     </div>

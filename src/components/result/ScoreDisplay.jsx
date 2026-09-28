@@ -1,21 +1,19 @@
 export default function ScoreDisplay({ points, maxPossiblePoints, highScore }) {
   return (
-    <div className="text-center mb-5 sm:mb-10 w-full">
-      <h1 className="font-headline font-bold text-[11px] sm:text-sm tracking-[0.18em] sm:tracking-[0.2em] text-primary/80 uppercase mb-3 sm:mb-4">
-        Quiz Complete
-      </h1>
+    <div className="text-center mb-6 w-full">
+      <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-600 mb-2 block">
+        Assessment Complete
+      </span>
       <div className="flex flex-col items-center">
-        <span className="font-headline font-extrabold text-3xl sm:text-7xl md:text-9xl tracking-tighter text-on-surface leading-none">
+        <div className="text-5xl sm:text-6xl font-medium tracking-tight text-zinc-100 font-mono">
           {points}
-          <span className="text-primary/20 mx-2">/</span>
+          <span className="text-zinc-700 mx-2">/</span>
           {maxPossiblePoints}
-        </span>
-        <div className="flex items-center gap-2 mt-4 sm:mt-6 px-3 sm:px-4 py-1.5 bg-surface-container-highest/50 rounded-full border border-outline-variant/10">
-          <span className="material-symbols-outlined text-sm text-secondary">
-            star
-          </span>
-          <span className="text-xs sm:text-sm font-label font-medium text-on-surface-variant">
-            High Score: <span className="text-on-surface">{highScore}</span>
+        </div>
+        <div className="flex items-center gap-1.5 mt-3 px-3 py-1 bg-zinc-950 border border-zinc-900 rounded-md">
+          <span className="text-xs font-mono text-zinc-500">
+            High Score:{" "}
+            <span className="text-zinc-300 font-medium">{highScore}</span>
           </span>
         </div>
       </div>

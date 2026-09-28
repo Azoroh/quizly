@@ -1,15 +1,17 @@
 export default function ResultActions({ onRestart, onNewQuiz }) {
   return (
-    <div className="w-full max-w-md flex flex-col gap-3">
+    <div className="w-full flex flex-col gap-2">
       <button
+        type="button"
         onClick={onRestart}
-        className="w-full py-4 bg-gradient-to-r from-primary to-primary-dim text-on-primary-fixed font-headline font-bold rounded-full transition-all hover:brightness-110 active:scale-[0.98] shadow-[0_10px_30px_-10px_rgba(159,167,255,0.5)]"
+        className="w-full h-9 flex items-center justify-center bg-zinc-100 text-zinc-900 hover:bg-white text-xs font-medium rounded-md transition-all shadow-sm"
       >
         Restart Quiz
       </button>
       <button
+        type="button"
         onClick={onNewQuiz}
-        className="w-full py-3.5 text-on-surface-variant hover:text-on-surface font-label font-semibold transition-colors text-sm rounded-full border border-transparent hover:border-outline-variant/20"
+        className="w-full h-9 flex items-center justify-center bg-zinc-950 border border-zinc-900 text-zinc-400 hover:text-zinc-100 hover:border-zinc-800 text-xs font-medium rounded-md transition-all"
       >
         Generate Another Quiz
       </button>
