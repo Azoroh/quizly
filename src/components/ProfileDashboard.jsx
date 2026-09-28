@@ -10,9 +10,11 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { formatTitle } from "@/utils/formatTitle";
+import { useQuiz } from "@/context/QuizContext";
 
 export default function ProfileDashboard() {
   const { user, signOut } = useAuth();
+  const { dispatch } = useQuiz();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -70,6 +72,14 @@ export default function ProfileDashboard() {
         },
       },
     });
+  }
+
+  function handleRerunQuiz(quiz) {
+    dispatch({ type: "textInput", payload: quiz.title });
+
+    dispatch({ type: "ready", payload: quiz.questions });
+
+    navigate("/overview");
   }
 
   useEffect(() => {
@@ -205,6 +215,7 @@ export default function ProfileDashboard() {
                 {quizzes.map((quiz) => (
                   <div
                     key={quiz.id}
+                    onClick={() => handleRerunQuiz(quiz)}
                     className="group flex flex-col justify-between p-4 min-h-[120px] bg-zinc-950/50 border border-zinc-900 rounded-xl hover:border-zinc-700 hover:bg-zinc-900/50 transition-all cursor-pointer"
                   >
                     {/* TOP ROW: Title and Version Badge Only */}
