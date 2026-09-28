@@ -1,6 +1,3 @@
-import StartHeader from "./start/StartHeader";
-import LoadingHeader from "./loading/LoadingHeader";
-
 export default function ErrorScreen({ onTryAgain, onBackToHome, error }) {
   return (
     <div className="dark bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col overflow-hidden">
@@ -12,7 +9,7 @@ export default function ErrorScreen({ onTryAgain, onBackToHome, error }) {
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/5 blur-[120px] rounded-full pointer-events-none"></div>
 
       {/* <StartHeader /> */}
-      <LoadingHeader />
+      {/* <LoadingHeader />*/}
       {/* <header className="flex items-center justify-center w-full py-6 px-8 fixed top-0 z-50">
         <div className="flex items-center gap-2">
           <span className="text-2xl font-headline font-bold tracking-tighter text-primary">
