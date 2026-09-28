@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import {
-  ArrowLeftIcon,
-  LogOutIcon,
-  FileTextIcon,
-  Loader2Icon,
-} from "lucide-react";
+import { ArrowLeftIcon, LogOutIcon, FileTextIcon } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ProfileDashboard() {
@@ -22,15 +17,12 @@ export default function ProfileDashboard() {
         const { data, error } = await supabase
           .from("quizzes")
           .select("*")
-          .order("created_at", { ascending: false }); //Newest first
+          .order("created_at", { ascending: false });
 
         if (error) throw error;
 
         if (data) {
-          const titleTracker = {}; //calculate generation count dynamically
-
-          // We reverse the array to process oldest-to-newest, assign numbers,
-          // then reverse it back so newest is at the top of the UI.
+          const titleTracker = {};
           const processedQuizzes = [...data]
             .reverse()
             .map((quiz) => {
@@ -103,58 +95,90 @@ export default function ProfileDashboard() {
           )}
         </div>
 
-        {loading ? (
-          <div className="py-20 flex justify-center">
-            <Loader2Icon className="size-5 animate-spin text-zinc-700" />
-          </div>
-        ) : quizzes.length === 0 ? (
-          <div className="py-20 border border-dashed border-zinc-900 rounded-lg flex flex-col items-center justify-center text-center">
-            <p className="text-sm text-zinc-500 mb-4">
-              No quizzes generated yet.
-            </p>
-            <button
-              onClick={() => navigate("/")}
-              className="text-sm font-medium text-zinc-300 hover:text-white transition-colors"
-            >
-              Create your first quiz &rarr;
-            </button>
-          </div>
-        ) : (
+        {/* Smooth Transition Container for Loading State */}
+        <div
+          className={`transition-opacity duration-300 ease-in-out ${
+            loading ? "opacity-100" : "opacity-0 pointer-events-none hidden"
+          }`}
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-            {quizzes.map((quiz) => (
+            {[...Array(8)].map((_, i) => (
               <div
-                key={quiz.id}
-                className="group flex flex-col justify-between p-4 min-h-[120px] bg-zinc-950/50 border border-zinc-900 rounded-xl hover:border-zinc-700 hover:bg-zinc-900/50 transition-all cursor-pointer"
+                key={i}
+                className="flex flex-col justify-between p-4 min-h-[120px] bg-zinc-950/30 border border-zinc-900/80 rounded-xl animate-pulse"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-2.5 flex-1 min-w-0">
-                    <FileTextIcon className="size-4 text-zinc-600 shrink-0 mt-0.5" />
-                    <h3
-                      className="text-sm text-start font-medium text-zinc-300 group-hover:text-zinc-100 line-clamp-2 leading-snug transition-colors"
-                      title={quiz.title}
-                    >
-                      {formatTitle(quiz.title)}
-                    </h3>
+                    <div className="size-4 bg-zinc-800/60 rounded shrink-0 mt-0.5" />
+                    <div className="space-y-2 w-full">
+                      <div className="h-3.5 bg-zinc-800/60 rounded w-full" />
+                      <div className="h-3.5 bg-zinc-800/40 rounded w-3/4" />
+                    </div>
                   </div>
-
-                  {quiz.generation > 1 && (
-                    <span className="shrink-0 flex items-center justify-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-800 text-zinc-400">
-                      v{quiz.generation}
-                    </span>
-                  )}
                 </div>
 
-                <div className="flex items-center justify-between mt-4 text-[11px] font-medium text-zinc-500">
-                  <span>{quiz.questions?.length || 0} Qs</span>
-                  <span>
-                    {new Date(quiz.created_at).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
+                <div className="flex items-center justify-between mt-4">
+                  <div className="h-3 bg-zinc-800/40 rounded w-8" />
+                  <div className="h-3 bg-zinc-800/40 rounded w-12" />
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Loaded / Empty State Container */}
+        {!loading && (
+          <div className="transition-opacity duration-300 ease-in-out opacity-100">
+            {quizzes.length === 0 ? (
+              <div className="py-20 border border-dashed border-zinc-900 rounded-lg flex flex-col items-center justify-center text-center">
+                <p className="text-sm text-zinc-500 mb-4">
+                  No quizzes generated yet.
+                </p>
+                <button
+                  onClick={() => navigate("/")}
+                  className="text-sm font-medium text-zinc-300 hover:text-white transition-colors"
+                >
+                  Create your first quiz &rarr;
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                {quizzes.map((quiz) => (
+                  <div
+                    key={quiz.id}
+                    className="group flex flex-col justify-between p-4 min-h-[120px] bg-zinc-950/50 border border-zinc-900 rounded-xl hover:border-zinc-700 hover:bg-zinc-900/50 transition-all cursor-pointer"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                        <FileTextIcon className="size-4 text-zinc-600 shrink-0 mt-0.5" />
+                        <h3
+                          className="text-sm text-start font-medium text-zinc-300 group-hover:text-zinc-100 line-clamp-2 leading-snug transition-colors"
+                          title={quiz.title}
+                        >
+                          {formatTitle(quiz.title)}
+                        </h3>
+                      </div>
+
+                      {quiz.generation > 1 && (
+                        <span className="shrink-0 flex items-center justify-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-zinc-800 text-zinc-400">
+                          v{quiz.generation}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between mt-4 text-[11px] font-medium text-zinc-500">
+                      <span>{quiz.questions?.length || 0} Qs</span>
+                      <span>
+                        {new Date(quiz.created_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </main>
