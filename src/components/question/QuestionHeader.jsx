@@ -32,7 +32,7 @@ export default function QuestionHeader() {
       </div>
 
       {/* Progress Bar */}
-      <Progress value={progress} className="h-2 bg-zinc-800/80" />
+      <Progress value={progress} />
     </div>
   );
 }
