@@ -1,6 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Check, FileText, Loader2, Sparkles } from "lucide-react";
+import { Check, FileText, Sparkles } from "lucide-react";
 import { getStageStatus } from "../../utils/getStageStatus";
 import { getFileTypeSummary } from "../../utils/getFileTypeSummary";
 import { useQuiz } from "@/context/QuizContext";
@@ -107,9 +105,10 @@ export default function LoadingCard() {
                   }`}
                 >
                   {status === "done" ? (
-                    <Check className="w-3 h-3 text-zinc-300" />
+                    <Check className="w-3 h-3 text-zinc-300 shrink-0" />
                   ) : status === "active" ? (
-                    <Loader2 className="w-3 h-3 animate-spin text-zinc-300" />
+                    // Pixel-perfect CSS circle spinner
+                    <div className="w-3 h-3 rounded-full border-[1.5px] border-zinc-900 border-t-zinc-300 animate-spin shrink-0" />
                   ) : (
                     idx + 1
                   )}
