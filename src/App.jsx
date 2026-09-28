@@ -45,7 +45,7 @@ export default function App() {
 
             <Toaster
               theme="dark"
-              position="top-center"
+              position="bottom-right"
               closeButton={false}
               duration={4000}
             />
