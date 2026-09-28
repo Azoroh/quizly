@@ -21,24 +21,24 @@ export default function LandingScreen() {
   }, [status, error, dispatch]);
 
   return (
-    <div className="bg-zinc-950 text-zinc-100 font-body selection:bg-primary/30 min-h-screen overflow-x-hidden dark">
+    <div className="bg-[#09090b] text-zinc-100 font-body selection:bg-zinc-800 min-h-screen overflow-x-hidden">
       {/* ── Loading overlay ─────────────────────────────────────────────────── */}
       {status === "loading" && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-[#09090b]/80 backdrop-blur-sm">
           <LoadingScreen />
         </div>
       )}
 
       {status !== "loading" && <Navbar />}
 
-      <main className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-14 sm:pb-20">
+      <main className="relative mx-auto max-w-6xl px-6 pt-20 pb-24">
+        {/* Subtle top illumination */}
         <div
           aria-hidden="true"
-          className="absolute inset-x-0 top-0 -z-10 h-[700px] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(63,63,70,0.35),transparent_70%)] pointer-events-none"
+          className="absolute inset-x-0 top-0 -z-10 h-[500px] bg-[radial-gradient(ellipse_50%_50%_at_50%_0%,rgba(39,39,42,0.2),transparent_100%)] pointer-events-none"
         />
 
         <Hero />
-
         <BentoGrid />
       </main>
 

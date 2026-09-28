@@ -19,41 +19,41 @@ function GithubIcon(props) {
 
 export default function Footer() {
   return (
-    <footer className="bg-zinc-950 border-t border-zinc-900">
-      <div className="w-full py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 max-w-7xl mx-auto px-8">
-          {/* Brand */}
-          <div className="flex flex-col gap-3">
-            <div className="text-lg font-bold text-white font-headline">
+    <footer className="bg-[#09090b] border-t border-zinc-900 text-left">
+      <div className="w-full py-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 max-w-6xl mx-auto px-6">
+          {/* Brand - Spans full width on mobile, 1 column on desktop */}
+          <div className="col-span-2 md:col-span-1 flex flex-col items-start gap-3">
+            <div className="text-sm font-semibold text-zinc-100 tracking-tight">
               Quizly
             </div>
-            <p className="text-sm text-zinc-500 leading-relaxed">
-              AI-powered quizzes that make learning faster and more fun.
+            <p className="text-xs text-zinc-500 leading-relaxed max-w-[200px]">
+              Intelligent assessment generation for accelerated learning.
             </p>
-            <p className="text-xs text-zinc-600 mt-4">
-              © 2024 Quizly AI. All rights reserved.
+            <p className="text-[10px] font-mono text-zinc-600 mt-2">
+              © 2026 Quizly AI.
             </p>
           </div>
 
           {/* Product */}
-          <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">
+          <div className="flex flex-col items-start gap-3">
+            <h4 className="text-[10px] font-mono text-zinc-600 uppercase tracking-wider mb-1">
               Product
             </h4>
             <Link
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
               to="/features"
             >
               Features
             </Link>
             <Link
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
               to="/pricing"
             >
               Pricing
             </Link>
             <Link
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
               to="/changelog"
             >
               Changelog
@@ -61,55 +61,40 @@ export default function Footer() {
           </div>
 
           {/* Legal */}
-          <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">
+          <div className="flex flex-col items-start gap-3">
+            <h4 className="text-[10px] font-mono text-zinc-600 uppercase tracking-wider mb-1">
               Legal
             </h4>
             <Link
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
               to="/privacy"
             >
-              Privacy Policy
+              Privacy
             </Link>
             <Link
-              className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
               to="/terms"
             >
-              Terms of Service
+              Terms
             </Link>
           </div>
 
           {/* Socials */}
-          <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">
-              Socials
+          <div className="flex flex-col items-start gap-3">
+            <h4 className="text-[10px] font-mono text-zinc-600 uppercase tracking-wider mb-1">
+              Connect
             </h4>
             <a
-              className="flex items-center justify-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
               href="https://twitter.com"
-              target="_blank"
-              rel="noreferrer"
             >
-              <XIcon className="w-4 h-4" />
-              Twitter / X
+              <XIcon className="w-3.5 h-3.5" /> Twitter
             </a>
             <a
-              className="flex items-center justify-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
+              className="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
               href="https://github.com"
-              target="_blank"
-              rel="noreferrer"
             >
-              <GithubIcon className="w-4 h-4" />
-              GitHub
-            </a>
-            <a
-              className="flex items-center justify-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors duration-300"
-              href="https://discord.com"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <MessageCircle className="w-4 h-4" />
-              Discord
+              <GithubIcon className="w-3.5 h-3.5" /> GitHub
             </a>
           </div>
         </div>
