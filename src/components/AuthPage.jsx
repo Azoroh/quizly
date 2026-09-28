@@ -16,7 +16,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (user) {
-      navigate("/profile", { replace: true });
+      navigate("/dashboard", { replace: true });
     }
   }, [user, navigate]);
 
@@ -45,7 +45,7 @@ export default function AuthPage() {
 
         if (error) throw error;
         toast.success("Welcome back!");
-        navigate("/profile"); // direct them to the startscreen on success
+        navigate("/dashboard"); // direct them to the startscreen on success
       }
     } catch (error) {
       toast.error(error.message || "An error occured during authentication.");

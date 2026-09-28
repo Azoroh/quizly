@@ -72,7 +72,7 @@ export default function Navbar() {
                 </button>
               </div>
               <Link
-                to="/profile"
+                to="/dashboard"
                 className="text-xs font-medium px-3 py-1.5 bg-zinc-100 text-zinc-900 hover:bg-white rounded-md transition-all shadow-sm"
               >
                 Library

@@ -36,7 +36,7 @@ export default function App() {
 
               {/* Strictly Protected Routes: Requires Login */}
               <Route element={<RequireAuth />}>
-                <Route path="/profile" element={<ProfileDashboard />} />
+                <Route path="/dashboard" element={<ProfileDashboard />} />
               </Route>
 
               {/* Catch-all */}
