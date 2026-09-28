@@ -11,6 +11,7 @@ import ErrorScreen from "./components/ErrorMessage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx"; //checking for active quiz
 import RequireAuth from "./components/RequireAuth.jsx"; // checking for logged-in user
 import AuthPage from "./components/AuthPage.jsx";
+import ProfileDashboard from "./components/ProfileDashboard.jsx";
 
 export default function App() {
   return (
@@ -33,9 +34,9 @@ export default function App() {
                 <Route path="/results" element={<ResultScreen />} />
               </Route>
 
-              {/* Strictly Protected Routes: Requires Login (coming soon) */}
+              {/* Strictly Protected Routes: Requires Login */}
               <Route element={<RequireAuth />}>
-                {/* <Route path="/profile" element={<ProfileDashboard />} /> */}
+                <Route path="/profile" element={<ProfileDashboard />} />
               </Route>
 
               {/* Catch-all */}
