@@ -3,6 +3,8 @@ import { Sparkles, LogOutIcon } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
+import logo from "@/assets/logo.svg";
+
 export default function Navbar() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -20,7 +22,11 @@ export default function Navbar() {
         {/* LEFT SECTION: Wrapped in flex-1 to anchor the left side */}
         <div className="flex-1 flex justify-start">
           <Link to="/" className="flex items-center gap-2 group">
-            <Sparkles className="size-4 text-zinc-100 opacity-90 group-hover:opacity-100 transition-opacity" />
+            <img
+              src={logo}
+              alt="Quizly Logo"
+              className="size-8 sm:size-9 text-zinc-100 opacity-90 group-hover:opacity-100 transition-opacity object-contain"
+            />
             <span className="text-sm font-semibold tracking-tight text-zinc-100">
               Quizly
             </span>
