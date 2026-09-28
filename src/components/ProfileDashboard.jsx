@@ -24,26 +24,52 @@ export default function ProfileDashboard() {
     const displayTitle =
       cleanTitle.length > 20 ? `${cleanTitle.slice(0, 20).trim()}` : cleanTitle;
 
-    const previousQuizzes = [...quizzes];
+    // const previousQuizzes = [...quizzes];
+    const quizToRestore = quizzes.find((quiz) => quiz.id === quizId);
 
     setQuizzes((currentQuizzes) =>
       currentQuizzes.filter((quiz) => quiz.id !== quizId),
     );
 
-    try {
-      const { error } = await supabase
-        .from("quizzes")
-        .delete()
-        .eq("id", quizId);
+    const deleteTimeout = setTimeout(async () => {
+      try {
+        const { error } = await supabase
+          .from("quizzes")
+          .delete()
+          .eq("id", quizId);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      toast.success(`"${displayTitle}" deleted`);
-    } catch (error) {
-      console.error("Error deleting quiz:", error);
-      setQuizzes(previousQuizzes);
-      toast.error(`Failed to delete "${displayTitle}". Restored.`);
-    }
+        // toast.success(`"${displayTitle}" deleted`);
+      } catch (error) {
+        console.error("Error deleting quiz:", error);
+        setQuizzes((current) => {
+          const restored = [quizToRestore, ...current];
+          return restored.sort(
+            (a, b) => new Date(b.created_at) - new Date(a.created_at),
+          );
+        });
+        toast.error(`Failed to delete "${displayTitle}". Restored.`);
+      }
+    }, 3000);
+
+    toast(`"${displayTitle}" deleted`, {
+      duration: 4000,
+      action: {
+        label: "Undo",
+        onClick: () => {
+          clearTimeout(deleteTimeout); //cancel the timer: cancel databse deletion
+
+          setQuizzes((current) => {
+            const restored = [quizToRestore, ...current];
+            return restored.sort(
+              (a, b) => new Date(b.created_at) - new Date(a.created_at),
+            );
+          });
+          toast.success(`Restored`);
+        },
+      },
+    });
   }
 
   useEffect(() => {
