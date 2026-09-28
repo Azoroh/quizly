@@ -4,21 +4,43 @@ import { useQuiz } from "../context/QuizContext";
 import StartButton from "./start/StartButton";
 import { getSourceStatus } from "../utils/getSourceStatus";
 import { formatTime } from "../utils/formatTime";
+import { formatTitle } from "@/utils/formatTitle";
 import { FileText, Clock, Layers, ArrowLeft, LineChart } from "lucide-react";
 
 export default function StartScreen() {
   const navigate = useNavigate();
-  const { dispatch, questionCount, questions, sourceUsage = [] } = useQuiz();
+
+  const {
+    dispatch,
+    questionCount,
+    questions,
+    totalQuestions = [],
+    sourceUsage = [],
+    isRerun,
+    inputText,
+  } = useQuiz();
 
   const estimatedSeconds = questionCount * 20;
-  const timeLabel =
-    estimatedSeconds < 60
-      ? `${formatTime(estimatedSeconds, true)} sec`
-      : `${formatTime(estimatedSeconds, true)} min`;
+
+  const maxQ =
+    totalQuestions.length > 0 ? totalQuestions.length : questions.length || 5;
+  let questionOptions = [];
+
+  if (maxQ <= 5) {
+    // Fallback if the AI returns fewer than 5 questions
+    questionOptions = [maxQ];
+  } else {
+    const opt1 = 5; // minimum is 5
+    const opt3 = maxQ; // maximum is total generated/loaded
+    const opt2 = Math.round((opt1 + opt3) / 2); // midpoint without decimals
+
+    // Array.from(new Set(...)) automatically removes duplicates
+    questionOptions = Array.from(new Set([opt1, opt2, opt3]));
+    // if say: maxQ is 6, it prevents [5, 6, 6] and outputs [5, 6]
+  }
 
   return (
     <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col items-center justify-center overflow-x-hidden relative px-4 sm:px-6 py-12">
-      {/* Main Minimalist Container */}
       <div className="w-full max-w-xl bg-[#09090b] border border-zinc-900 rounded-xl p-6 sm:p-8 shadow-sm flex flex-col gap-8">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-3">
@@ -27,19 +49,20 @@ export default function StartScreen() {
           </div>
 
           <h1 className="text-xl font-medium tracking-tight text-zinc-100">
-            Your quiz is ready
+            {isRerun ? "Quiz loaded from Library" : "Your quiz is ready"}
           </h1>
 
           <p className="text-xs text-zinc-500 max-w-sm leading-relaxed">
-            Review your parsed sources below, select your preferred question
-            volume, and begin when ready.
+            {isRerun
+              ? `Review your settings for "${formatTitle(inputText)}" and begin when ready.`
+              : "Review your parsed sources below, select your preferred question volume, and begin when ready."}
           </p>
         </div>
 
         {/* Body Content */}
         <div className="flex flex-col gap-6">
           {/* Source document badges */}
-          {sourceUsage.length > 0 && (
+          {!isRerun && sourceUsage.length > 0 && (
             <section aria-label="Source documents">
               <p className="text-[10px] font-mono uppercase tracking-wider text-zinc-600 mb-2.5">
                 Sources used
@@ -92,7 +115,6 @@ export default function StartScreen() {
                   />
                 ),
                 label: "Est. Time",
-                // Split the time number from the unit so they don't jump around
                 value:
                   estimatedSeconds < 60
                     ? `${estimatedSeconds}`
@@ -119,7 +141,6 @@ export default function StartScreen() {
                 <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-600">
                   {label}
                 </span>
-                {/* Fixed layout container to prevent text shifting */}
                 <div className="flex items-baseline gap-1 text-xs font-medium text-zinc-200">
                   <span>{value}</span>
                   {unit && (
@@ -138,7 +159,7 @@ export default function StartScreen() {
               Select Question Count
             </p>
             <div className="flex p-0.5 bg-zinc-950 border border-zinc-900 rounded-md w-full max-w-[240px]">
-              {[5, 10, 15].map((count) => (
+              {questionOptions.map((count) => (
                 <button
                   key={count}
                   type="button"
@@ -165,11 +186,15 @@ export default function StartScreen() {
           <button
             type="button"
             onClick={() => {
-              dispatch({ type: "newQuiz" });
-              navigate("/");
+              if (isRerun) {
+                navigate("/dashboard");
+              } else {
+                dispatch({ type: "newQuiz" });
+                navigate("/");
+              }
             }}
             className="h-10 w-10 shrink-0 rounded-md border border-zinc-800 bg-zinc-950 text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100 flex items-center justify-center transition-colors"
-            title="Back to generator"
+            title={isRerun ? "Back to library" : "Back to generator"}
           >
             <ArrowLeft className="size-4" />
           </button>

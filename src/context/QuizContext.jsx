@@ -35,6 +35,8 @@ const initialState = {
   uploadedFiles: [],
   sourceUsage: [],
   hasShownSourceToast: false,
+
+  isRerun: false,
 };
 
 function init(initial) {
@@ -65,6 +67,7 @@ function reducer(state, action) {
         ...state,
         status: "loading",
         error: null,
+        isRerun: false,
       };
 
     case "ready": {
@@ -174,7 +177,7 @@ function reducer(state, action) {
         reviewPayload: [],
         sourceUsage: [],
         hasShownSourceToast: false,
-        //! LETS GET BACK TO THIS AFTER TESTING
+        isRerun: false,
       };
 
     case "tickTock": {
@@ -253,6 +256,7 @@ function reducer(state, action) {
 
     case "finalizingStage":
       return { ...state, loadingStage: "finalizing" };
+
     case "readyStage":
       return { ...state, loadingStage: "ready" };
 
@@ -265,6 +269,26 @@ function reducer(state, action) {
 
     case "shownSourceToast":
       return { ...state, hasShownSourceToast: true };
+
+    //Reruns
+    case "loadRerun": {
+      const selectedQuestions = getRandomItems(
+        action.payload.questions,
+        state.questionCount,
+      );
+
+      return {
+        ...state,
+        status: "ready",
+        totalQuestions: action.payload.questions,
+        questions: selectedQuestions,
+        quizSeconds: 0,
+        remainingSeconds: selectedQuestions.length * SECS_PER_QUESTION,
+        aiSummaryStatus: "idle",
+        isRerun: true,
+        inputText: action.payload.title,
+      };
+    }
 
     default:
       throw new Error("Unknown Action");

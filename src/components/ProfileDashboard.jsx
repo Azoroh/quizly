@@ -75,9 +75,10 @@ export default function ProfileDashboard() {
   }
 
   function handleRerunQuiz(quiz) {
-    dispatch({ type: "textInput", payload: quiz.title });
-
-    dispatch({ type: "ready", payload: quiz.questions });
+    dispatch({
+      type: "loadRerun",
+      payload: { questions: quiz.questions, title: quiz.title },
+    });
 
     navigate("/overview");
   }
