@@ -2,14 +2,49 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeftIcon, LogOutIcon, FileTextIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  LogOutIcon,
+  FileTextIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { toast } from "sonner";
+import { formatTitle } from "@/utils/formatTitle";
 
 export default function ProfileDashboard() {
   const { user, signOut } = useAuth();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  async function handleDeleteQuiz(e, quizId, rawTitle) {
+    e.stopPropagation();
+
+    const cleanTitle = formatTitle(rawTitle);
+    const displayTitle =
+      cleanTitle.length > 20 ? `${cleanTitle.slice(0, 20).trim()}` : cleanTitle;
+
+    const previousQuizzes = [...quizzes];
+
+    setQuizzes((currentQuizzes) =>
+      currentQuizzes.filter((quiz) => quiz.id !== quizId),
+    );
+
+    try {
+      const { error } = await supabase
+        .from("quizzes")
+        .delete()
+        .eq("id", quizId);
+
+      if (error) throw error;
+
+      toast.success(`"${displayTitle}" deleted`);
+    } catch (error) {
+      console.error("Error deleting quiz:", error);
+      setQuizzes(previousQuizzes);
+      toast.error(`Failed to delete "${displayTitle}". Restored.`);
+    }
+  }
 
   useEffect(() => {
     async function fetchUserQuizzes() {
@@ -52,8 +87,6 @@ export default function ProfileDashboard() {
     toast.success("Logged out");
     navigate("/");
   }
-
-  const formatTitle = (title) => title.replace(/\.(pdf|txt|docx?|md)$/i, "");
 
   return (
     <div className="min-h-[100dvh] w-full bg-[#09090b] text-zinc-100 font-body flex flex-col selection:bg-zinc-800">
@@ -148,6 +181,7 @@ export default function ProfileDashboard() {
                     key={quiz.id}
                     className="group flex flex-col justify-between p-4 min-h-[120px] bg-zinc-950/50 border border-zinc-900 rounded-xl hover:border-zinc-700 hover:bg-zinc-900/50 transition-all cursor-pointer"
                   >
+                    {/* TOP ROW: Title and Version Badge Only */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-2.5 flex-1 min-w-0">
                         <FileTextIcon className="size-4 text-zinc-600 shrink-0 mt-0.5" />
@@ -166,14 +200,31 @@ export default function ProfileDashboard() {
                       )}
                     </div>
 
+                    {/* BOTTOM ROW: Metadata and Delete Action */}
                     <div className="flex items-center justify-between mt-4 text-[11px] font-medium text-zinc-500">
-                      <span>{quiz.questions?.length || 0} Qs</span>
-                      <span>
-                        {new Date(quiz.created_at).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <span>{quiz.questions?.length || 0} Qs</span>
+                        <span>
+                          {new Date(quiz.created_at).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                            },
+                          )}
+                        </span>
+                      </div>
+
+                      {/* The Delete Button (Isolated at the bottom right) */}
+                      <button
+                        onClick={(e) =>
+                          handleDeleteQuiz(e, quiz.id, quiz.title)
+                        }
+                        className="opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity p-1.5 -mr-1.5 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-md"
+                        title="Delete Quiz"
+                      >
+                        <Trash2Icon className="size-3.5" />
+                      </button>
                     </div>
                   </div>
                 ))}
